@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 8 Chemistry Ultimate Master Quiz</title>
+    <style>
+        :root {
+            --primary: #1d3557;
+            --primary-dark: #03071e;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #e2eafc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f1faee;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 4px double var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #a8dadc;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: #1d3557;
+            font-weight: 500;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 8 Chemistry Master Revision Dashboard</h1>
+    <div class="intro">
+        <p><strong>Comprehensive End-of-Year Assessment:</strong> This master test covers all 3 Chemistry Modules. Answer the 75 multiple-choice questions followed by the structured written reasoning and theory sections. Once finished, click the button at the bottom to evaluate your performance and view all marking schemes.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Overall Performance Evaluated</h2>
+        <div class="score-display" id="final-score">0 / 75</div>
+        <p>Your score for the multiple-choice section is shown above. Please review the detailed marking schemes below to verify your written answers.</p>
+    </div>
+
+    <form id="master-chem-form">
+        <div class="section-heading">Section A: Multiple Choice Knowledge Base (Questions 1 - 75)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Section B: Chemical Reasoning Responses</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Section C: Advanced Laboratory Theory</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeMasterQuiz()">Submit Master Quiz & Reveal Answers</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    // MODULE 1: ATOMS, ELEMENTS, REACTION BASICS & COMBUSTION
+    { q: "Which definition correctly describes the layout of the Periodic Table?", a: ["A list of compounds arranged by boiling points", "A table of all known elements ordered by atomic number", "A record of physical state transformations", "A collection of mixtures found in nature"], c: 1, exp: "The Periodic Table lists all known elements in order of their atomic number." },
+    { q: "What term describes the horizontal rows across the periodic table?", a: ["Groups", "Periods", "Columns", "Families"], c: 1, exp: "Horizontal rows are called periods, while vertical columns are called groups." },
+    { q: "What is an element?", a: ["A substance made of different compounds bonded tightly", "A substance containing only one type of atom", "A blend of independent liquid phases", "A material that cannot exist below 0°C"], c: 1, exp: "An element is a pure substance containing only one type of atom." },
+    { q: "What describes a chemical compound?", a: ["Two or more different elements chemically joined together", "Unbonded mixed particles floating together", "A material composed entirely of neutrons", "A physical state transition product"], c: 0, exp: "A compound consists of two or more different elements chemically combined." },
+    { q: "Which of the following describes a mixture?", a: ["A pure single element in liquid form", "Two or more different elements or compounds not chemically joined together", "Atoms that are permanently bonded into a single pattern", "A toxic gas that cannot be separated by filtration"], c: 1, exp: "Mixtures contain different elements or compounds that are not chemically bonded." },
+    { q: "What processes occur during an authentic chemical reaction?", a: ["Substances change shape while maintaining identical bonds", "Atoms are rearranged to form new chemical substances", "The mass of the atomic nucleus is destroyed", "A solid alters into a gas without changing composition"], c: 1, exp: "Chemical reactions rearrange atoms to create entirely new elements or compounds." },
+    { q: "What is an alternative term for a chemical reaction due to its permanence?", a: ["Reversible reaction", "Irreversible reaction", "Physical state transition", "Electrolysis split"], c: 1, exp: "Chemical reactions are generally irreversible reactions because new substances form." },
+    { q: "What defines a physical reaction?", a: ["A process where new chemical species are permanently made", "A process where physical properties change, but no new substances are made", "An explosion that alters individual proton numbers", "A reaction producing a nitrate salt from an oxide base"], c: 1, exp: "Physical changes do not form new substances; they are typically reversible changes of state." },
+    { q: "What is the definition of a reactant?", a: ["The substance formed at the conclusion of an equation", "A substance that reacts together with another substance at the start", "An inert element that accelerates state changes", "The arrow indicating a reaction path"], c: 1, exp: "Reactants are the starting substances that interact during a reaction." },
+    { q: "What is the definition of a chemical product?", a: ["A substance present before a reaction initiates", "A substance formed in a chemical reaction", "The total energy absorbed during cooling", "The rate of bubbling measured in a lab"], c: 1, exp: "Products are the new substances generated by a chemical reaction." },
+    { q: "What does the Law of Conservation of Mass state?", a: ["Mass always increases during exothermic reactions", "The total mass of products equals the total mass of reactants", "Mass is destroyed when a fuel undergoes incomplete combustion", "Gases have no measurable mass in open lab beakers"], c: 1, exp: "Mass cannot be created or destroyed; the total mass of the reactants always equals the total mass of the products." },
+    { q: "What are hydrocarbons?", a: ["Compounds consisting of hydrogen and oxygen atoms only", "Compounds consisting of hydrogen and carbon atoms only", "Mixtures of carbon dioxide and water vapor", "Elements located in Group 0 of the periodic table"], c: 1, exp: "Hydrocarbons are compounds containing only hydrogen and carbon atoms." },
+    { q: "What products are generated by the complete combustion of a hydrocarbon fuel?", a: ["Carbon monoxide and water vapor", "Carbon dioxide and water vapour", "Soot and carbon particles", "Pure hydrogen and oxygen gases"], c: 1, exp: "Complete combustion occurs in plentiful oxygen, yielding carbon dioxide and water." },
+    { q: "When does incomplete combustion occur instead of complete combustion?", a: ["When the temperature exceeds 1540°C", "If there is not enough oxygen in the air", "When a metal base reacts with nitric acid", "When gold is melted inside a star-shaped mould"], c: 1, exp: "Incomplete combustion takes place when the supply of oxygen is limited." },
+    { q: "What toxic gas can be produced during incomplete combustion that can lead to death?", a: ["Carbon dioxide", "Carbon monoxide", "Sulfur dioxide", "Hydrogen gas"], c: 1, exp: "Carbon monoxide (CO) is a highly toxic, lethal gas produced by incomplete combustion." },
+    { q: "What solid waste product is produced during incomplete combustion that appears as soot and smoke?", a: ["Pure oxygen", "Carbon particles", "Copper oxide powder", "Magnesium chloride crystals"], c: 1, exp: "Soot consists of unburnt carbon particles released during incomplete combustion." },
+    { q: "What health risk is directly linked to the inhalation of soot produced by incomplete combustion?", a: ["Loss of hearing accuracy", "Breathing problems", "Altered bone density", "Skin pigmentation changes"], c: 1, exp: "Soot particles collect in respiratory pathways and cause breathing problems." },
+    { q: "If Iron reacts with oxygen to form Iron Oxide (rust), what type of reaction has taken place?", a: ["Physical change", "Chemical change", "Electrolysis split", "Incomplete combustion"], c: 1, exp: "Rusting creates a new compound (iron oxide), making it a chemical change." },
+    { q: "Ice melting into liquid water is an example of what type of process?", a: ["Chemical change", "Physical change", "Irreversible oxidation", "Salt formation"], c: 1, exp: "Melting changes physical state without making a new substance, meaning it is a physical change." },
+    { q: "In a written chemical equation, on which side of the arrow are the reactants positioned?", a: ["To the right of the arrow", "To the left of the arrow", "Underneath the reaction arrow", "After the final equals sign"], c: 1, exp: "Reactants are always written on the left side of a chemical equation." },
+    { q: "What does the arrow symbol indicate within a general chemical equation?", a: ["That the reaction is perfectly reversible", "That a chemical reaction has taken place", "That mass has escaped into the room", "That the products are less concentrated"], c: 1, exp: "The arrow indicates the chemical transformation from reactants into products." },
+    { q: "If 254g of Copper reacts completely with oxygen to form 318g of Copper Oxide, what mass of oxygen reacted?", a: ["572g", "64g", "318g", "0g"], c: 1, exp: "318g (product) - 254g (metal reactant) = 64g of oxygen due to conservation of mass." },
+    { q: "What is an endothermic reaction?", a: ["A reaction that gives out thermal energy", "A reaction that takes in thermal energy", "A reaction that produces a brilliant white flame", "A reaction that changes blue solutions to green"], c: 1, exp: "Endothermic reactions absorb thermal energy from their surroundings." },
+    { q: "What temperature change occurs in the surroundings during an exothermic reaction?", a: ["The temperature decreases", "The temperature increases", "The temperature drops below freezing", "There is no measurable change"], c: 1, exp: "Exothermic reactions release heat, raising the temperature of the surroundings." },
+    { q: "Which of the following processes represents an exothermic reaction?", a: ["Thermal decomposition", "Combustion", "Ice melting", "Crystallisation tracking"], c: 1, exp: "Combustion (burning) releases significant heat, making it an exothermic process." },
+
+    // MODULE 2: REACIVITY SERIES, ATOMIC STRUCTURE & EXTRACTION
+    { q: "What is the electrical charge of a proton?", a: ["0", "-1", "+1", "Neutral"], c: 2, exp: "Protons carry a positive charge of +1." },
+    { q: "What is the relative atomic mass of an electron?", a: ["1", "0", "-1", "4"], c: 1, exp: "Electrons have a mass of 0 (negligible mass) compared to protons and neutrons." },
+    { q: "Which subatomic particle has a relative mass of 1 and a charge of 0?", a: ["Proton", "Electron", "Neutron", "Nucleus"], c: 2, exp: "Neutrons are neutral particles with a mass of 1." },
+    { q: "Based on official melting point data, which metal melts at 98°C?", a: ["Gold", "Mercury", "Sodium", "Iron"], c: 2, exp: "Sodium has a relatively low metal melting point of 98°C." },
+    { q: "Which metal has the lowest melting point (-37°C), existing as a liquid at room temperature?", a: ["Gold", "Mercury", "Sodium", "Iron"], c: 1, exp: "Mercury's low melting point of -37°C makes it a liquid at room temperature." },
+    { q: "What element matches the chemical symbol 'He'?", a: ["Hydrogen", "Helium", "Lithium", "Mercury"], c: 1, exp: "'He' stands for Helium on the Periodic Table." },
+    { q: "Where are highly reactive alkali metals like Sodium and Potassium located on a periodic table layout?", a: ["Region 1 (far left)", "Region 2 (centre)", "Region 3 (far right)", "The bottom rows"], c: 0, exp: "Group 1 alkali metals are located on the far left (Region 1)." },
+    { q: "Where are non-metals like Oxygen and Chlorine classified on the periodic table layout?", a: ["Region 1", "Region 2", "Region 3 (far right)", "The transition block"], c: 2, exp: "Non-metals occupy the upper right section of the periodic table (Region 3)." },
+    { q: "Where are the less reactive transition metals like Iron and Copper located?", a: ["Region 1", "Region 2 (centre block)", "Region 3", "Group 0"], c: 1, exp: "Transition metals form the large central block of the table (Region 2)." },
+    { q: "Why is copper sulfate absent from the Periodic Table?", a: ["It is a liquid transition element", "It is a compound, not an element", "Its atomic number exceeds 118", "It is an unbonded physical mixture"], c: 1, exp: "The Periodic Table only displays elements; copper sulfate is a chemical compound." },
+    { q: "What metal bursts into flames straight away when heated in air?", a: ["Gold", "Mercury", "Sodium", "Iron"], c: 2, exp: "Sodium reacts vigorously with oxygen, bursting into flames immediately when heated in air." },
+    { q: "What is formed when a metal reacts with oxygen gas?", a: ["Metal salt", "Metal hydroxide", "Metal oxide", "Metal chloride"], c: 2, exp: "Metal + Oxygen -> Metal Oxide." },
+    { q: "What products are generated when a metal reacts with an acid?", a: ["Metal oxide and water", "Salt and hydrogen gas", "Metal hydroxide and hydrogen", "Carbon dioxide and salt"], c: 1, exp: "Metals react with acids to displace hydrogen, producing a salt and hydrogen gas." },
+    { q: "What gas is released when metals react with acids, creating bubbles in a test tube?", a: ["Oxygen", "Carbon dioxide", "Hydrogen", "Nitrogen"], c: 2, exp: "Hydrogen gas is released during metal-acid reactions." },
+    { q: "What specific salt is produced when magnesium reacts with hydrochloric acid?", a: ["Magnesium sulfate", "Magnesium chloride", "Magnesium nitrate", "Magnesium oxide"], c: 1, exp: "Hydrochloric acid always forms chloride salts." },
+    { q: "What salt is generated when iron reacts with sulfuric acid?", a: ["Iron chloride", "Iron sulfate", "Iron nitrate", "Iron oxide"], c: 1, exp: "Sulfuric acid produces metal sulfate salts." },
+    { q: "What salt is formed when a metal reacts with nitric acid?", a: ["Metal chloride", "Metal sulfate", "Metal nitrate", "Metal hydroxide"], c: 2, exp: "Nitric acid reactions yield metal nitrate salts." },
+    { q: "What products form when alkali metals react with cold water?", a: ["Metal oxide and water", "Metal hydroxide and hydrogen gas", "Salt and carbon dioxide", "No reaction happens"], c: 1, exp: "Alkali Metal + Water -> Metal Hydroxide + Hydrogen gas." },
+    { q: "How does reactivity change as you move down Group 1 elements?", a: ["It decreases down the group", "It increases down the group", "It remains exactly identical", "The elements become unreactive gases"], c: 1, exp: "Reactivity increases down Group 1 as the outer electron is lost more easily." },
+    { q: "Which of these metals requires high-energy steam to react, showing no reaction with cold water?", a: ["Potassium", "Sodium", "Magnesium", "Copper"], c: 2, exp: "Magnesium reacts very slowly with cold water but reacts readily with steam." },
+    { q: "Which metal shows no reaction when exposed to cold water, steam, or laboratory acids?", a: ["Calcium", "Zinc", "Iron", "Copper"], c: 3, exp: "Copper is low on the reactivity series and does not react with water, steam, or dilute acids." },
+    { q: "What is the definition of a displacement reaction?", a: ["A change where atomic mass is destroyed", "A reaction where a MORE reactive metal displaces a LESS reactive metal from a compound", "The transition of a solid directly into a gas", "A reaction that only uses universal indicator dyes"], c: 1, exp: "In a displacement reaction, a more reactive metal takes the place of a less reactive metal in its compound." },
+    { q: "What will be observed if a more reactive magnesium strip is placed in copper sulfate solution?", a: ["No reaction occurs because copper is stronger", "Magnesium displaces copper, forming magnesium sulfate and solid copper", "The solution turns bright purple and forms bubbles", "The magnesium metal liquefies at 98°C"], c: 1, exp: "Magnesium is more reactive than copper, so it displaces copper from its solution." },
+    { q: "What color change occurs in the solution when an iron nail displaces copper from copper sulfate?", a: ["It changes from blue to green", "It turns from colourless to dark purple", "It turns from yellow to bright red", "It remains completely blue"], c: 0, exp: "The solution changes from blue to green as green iron sulfate forms." },
+    { q: "What appearance change occurs on the surface of an iron nail during its displacement reaction with copper sulfate?", a: ["It turns bright white", "It becomes coated with a brown, pink, or copper-colored solid", "It dissolves completely into bubbles of carbon dioxide", "No visible change takes place"], c: 1, exp: "The nail becomes coated with brown/pink copper metal that has been displaced from the solution." },
+    { q: "What will happen if copper metal is added to an iron sulfate solution?", a: ["Copper will displace the iron", "No reaction happens because copper is less reactive than iron", "The solution turns red instantly", "Bubbles of hydrogen gas are given off rapidly"], c: 1, exp: "Copper is less reactive than iron, so it cannot displace iron from its compound." },
+    { q: "How must highly reactive metals like Potassium and Sodium be extracted from their ores?", a: ["By heating their ores with carbon", "By electrolysis of molten compounds", "By washing the ore with hydrochloric acid", "They are found as uncombined pure elements"], c: 1, exp: "Metals above carbon in the reactivity series must be extracted using electrolysis." },
+    { q: "Which metal can be extracted from its ore by reduction, by heating it with carbon?", a: ["Potassium", "Sodium", "Zinc", "Lithium"], c: 2, exp: "Zinc is below carbon in the reactivity series, so it can be extracted by heating with carbon." },
+    { q: "What reducing agent gas reduces iron ore inside an industrial blast furnace?", a: ["Oxygen gas", "Carbon monoxide gas", "Hydrogen gas", "Nitrogen gas"], c: 1, exp: "Carbon monoxide (CO) gas acts as the reducing agent that removes oxygen from iron ore." },
+    { q: "What is the chemical formula for iron ore (iron oxide) used in the blast furnace process?", a: ["FeCl2", "Fe2O3", "FeSO4", "CuO"], c: 1, exp: "Iron ore is represented by the chemical formula Fe2O3." },
+    { q: "In the blast furnace reaction Fe2O3 + 3CO -> 2Fe + 3CO2, what happens to the iron ore?", a: ["It is oxidised because it gains carbon atoms", "It is reduced because it loses oxygen atoms", "It undergoes electrolysis split", "It changes into an alkali hydroxide"], c: 1, exp: "The iron oxide loses oxygen, meaning it is reduced to metallic iron." },
+    { q: "Which metal is found completely uncombined as a pure element in nature due to its extremely low reactivity?", a: ["Calcium", "Aluminium", "Iron", "Gold"], c: 3, exp: "Gold is highly unreactive and is found in its elemental form in nature." },
+    { q: "Where are protons and neutrons located together inside an atom?", a: ["Orbiting in outer shells", "Inside the central nucleus", "Floating outside the atom", "In the space between electron levels"], c: 1, exp: "The nucleus at the center of the atom contains both protons and neutrons." },
+    { q: "What subatomic components surround the nucleus in distinct shell pathways?", a: ["Protons", "Neutrons", "Electrons", "Oxides"], c: 2, exp: "Electrons orbit the central nucleus in fixed shells." },
+    { q: "What indicator observation confirms that Test Tube A has the highest rate of reaction when metals are tested with acid?", a: ["The tube gets colder", "It produces the most bubbles / most vigorous fizzing", "The metal turns into a yellow liquid phase", "The liquid turns completely neutral"], c: 1, exp: "The rate of bubbling reflects the rate of reaction and the speed at which hydrogen gas is produced." },
+
+    // MODULE 3: ACIDS, ALKALIS, PH SCALE & NEUTRALISATION
+    { q: "What distinguishes a concentrated acid from a dilute acid?", a: ["Concentrated acid has a higher boiling point", "Concentrated acid has more acid particles per litre than a dilute acid", "Dilute acid has zero water molecules", "Concentrated acid contains no hydrogen"], c: 1, exp: "Concentration refers to the number of solute particles per unit volume." },
+    { q: "What is the chemical formula for Sulfuric Acid?", a: ["HCl", "HNO3", "H2SO4", "NaOH"], c: 2, exp: "Sulfuric acid is represented by H2SO4." },
+    { q: "What is the chemical formula for hydrochloric acid?", a: ["HNO3", "HCl", "H2SO4", "NaOH"], c: 1, exp: "Hydrochloric acid is represented by HCl." },
+    { q: "What is the chemical formula for Nitric Acid?", a: ["HNO3", "HCl", "H2SO4", "NaOH"], c: 0, exp: "Nitric acid is represented by HNO3." },
+    { q: "What alkali has the chemical formula NaOH?", a: ["Calcium carbonate", "Sodium hydroxide", "Copper oxide", "Magnesium sulfate"], c: 1, exp: "NaOH stands for Sodium hydroxide." },
+    { q: "What is an indicator?", a: ["A substance that changes mass during cooking", "A solution that changes colour to determine the pH of a solution", "A tool used to measure precise liquid weights", "A gas released by active metals"], c: 1, exp: "Indicators change color depending on the pH of the solution they are added to." },
+    { q: "What colour does universal indicator turn when introduced to an acidic solution?", a: ["Blue", "Purple", "Green", "Red"], c: 3, exp: "Universal indicator turns red in strongly acidic solutions." },
+    { q: "What colour does universal indicator turn when added to an alkaline solution?", a: ["Red", "Yellow", "Blue", "Orange"], c: 2, exp: "Universal indicator turns blue or purple in alkaline solutions." },
+    { q: "How does blue litmus paper behave when placed into an acid?", a: ["It remains completely blue", "It turns green", "It turns red", "It turns bright yellow"], c: 2, exp: "Acids turn blue litmus paper red." },
+    { q: "How does red litmus paper react when dipped into an alkaline solution?", a: ["It turns blue", "It remains red", "It turns colourless", "It turns red-orange"], c: 0, exp: "Alkalis turn red litmus paper blue." },
+    { q: "What is the specific pH value of pure water?", a: ["2.2", "4.4", "7.0", "9.9"], c: 2, exp: "Pure water has a neutral pH value of 7.0." },
+    { q: "How is pure water categorized on the pH scale based on its value?", a: ["Acidic", "Alkaline", "Neutral", "Strong acid"], c: 2, exp: "A pH of 7 is neutral." },
+    { q: "What pH value does lemon juice register when tested with an accurate digital probe?", a: ["2.2", "7.0", "9.9", "14.0"], c: 0, exp: "Lemon juice is strongly acidic with a pH of around 2.2." },
+    { q: "Based on a pH reading of 2.2, lemon juice is classified as what?", a: ["Alkali", "Neutral", "Acidic", "Strong alkali"], c: 2, exp: "A low pH value (below 7) indicates an acidic solution." },
+    { q: "What pH value does toothpaste record on a digital meter?", a: ["2.2", "4.4", "7.0", "9.9"], c: 3, exp: "Toothpaste is weakly alkaline with a pH value of 9.9." },
+    { q: "Based on its pH value of 9.9, toothpaste is classified as what?", a: ["Acid", "Neutral", "Alkaline", "Strong acid"], c: 2, exp: "Solutions with a pH between 8 and 14 are alkaline." },
+    { q: "What pH value is recorded for blood in the provided data?", a: ["2.2", "4.4", "7.4", "9.9"], c: 2, exp: "Blood has a slightly alkaline pH value of 7.4." },
+    { q: "What accurate pH value is assigned to tomato juice?", a: ["2.2", "4.4", "7.4", "12.0"], c: 1, exp: "Tomato juice has a weakly acidic pH value of 4.4." },
+    { q: "Based on its pH of 4.4, tomato juice is considered to be what?", a: ["Acidic", "Alkaline", "Neutral", "Strong base"], c: 0, exp: "A pH of 4.4 falls below 7, making it acidic." },
+    { q: "Why is a digital pH probe preferred over universal indicator paper?", a: ["It neutralizes the acid automatically", "It provides a more accurate result", "It extracts color pigments from plants", "It works without being cleaned"], c: 1, exp: "A pH probe gives a digital numerical readout, which is more accurate and precise than matching colors by eye." },
+    { q: "Why must a pH probe be dipped in pure water between testing different liquids?", a: ["To keep its electrical parts charged", "To make sure it is clean and not contaminated by the liquid tested before", "To reset its baseline reading back to 14", "To coat it with indicator dyes"], c: 1, exp: "Rinsing the probe prevents cross-contamination between different test solutions." },
+    { q: "What household cleaner turns universal indicator dark purple, showing it is a strong alkali?", a: ["Tomato juice", "Drain cleaner", "Vinegar", "Water"], c: 1, exp: "Drain cleaner has a high pH (12-14), turning universal indicator dark purple." },
+    { q: "What color does soap solution turn universal indicator, identifying it as a weak alkali?", a: ["Red", "Yellow", "Bottle green", "Purple"], c: 2, exp: "Soap turns universal indicator bottle green, indicating a weak alkali." },
+    { q: "What color does stomach acid produce in universal indicator, confirming it is a strong acid?", a: ["Red", "Yellow", "Bottle green", "Purple"], c: 0, exp: "Stomach acid has a low pH (1-2), turning universal indicator red." },
+    { q: "What label corresponds to a pH range of 1 to 2 on the continuous scale?", a: ["Strong Acid", "Weak Acid", "Neutral", "Strong Alkali"], c: 0, exp: "A pH of 1-2 indicates a strong acid." },
+    { q: "What label corresponds to a pH range of 3 to 6 on the continuous scale?", a: ["Strong Acid", "Weak Acid", "Neutral", "Weak Alkali"], c: 1, exp: "A pH of 3-6 indicates a weak acid." },
+    { q: "What label corresponds to a pH range of 8 to 11 on the scale?", a: ["Strong Acid", "Weak Acid", "Weak Alkali", "Strong Alkali"], c: 2, exp: "A pH of 8-11 indicates a weak alkali." },
+    { q: "What label corresponds to a pH range of 12 to 14 on the scale?", a: ["Strong Acid", "Neutral", "Weak Alkali", "Strong Alkali"], c: 3, exp: "A pH of 12-14 indicates a strong alkali." },
+    { q: "What process describes adding an alkali to an acid to produce a neutral solution?", a: ["Oxidation", "Crystallisation", "Neutralisation", "Reduction"], c: 2, exp: "Neutralisation reactions bring the pH of a solution closer to 7." },
+    { q: "What is the fundamental word equation for a neutralisation reaction between an acid and an alkali?", a: ["Acid + Alkali -> Metal Oxide", "Acid + Alkali -> Salt + Water", "Acid + Alkali -> Metal + Hydrogen", "Acid + Alkali -> Carbonate + Gas"], c: 1, exp: "The general equation for neutralization is Acid + Alkali -> Salt + Water." },
+    { q: "What products are formed when an acid reacts with a metal carbonate?", a: ["Salt and hydrogen only", "Salt, carbon dioxide, and water", "Metal hydroxide and water", "No change occurs"], c: 1, exp: "Acid + Metal Carbonate -> Salt + Carbon Dioxide + Water." },
+    { q: "What gas is released when an acid reacts with a carbonate, causing visible fizzing?", a: ["Hydrogen", "Oxygen", "Carbon dioxide", "Nitrogen"], c: 2, exp: "Carbon dioxide gas causes fizzing when carbonates react with acids." },
+    { q: "What fruit juice can pupils use as an alternative, natural indicator in the lab?", a: ["Orange juice", "Blackberry juice", "Apple juice", "Mango juice"], c: 1, exp: "Blackberry juice contains natural pigments that change color at different pH levels." },
+    { q: "What basic laboratory equipment is needed to crush plant material to extract an indicator?", a: ["A digital pH probe", "A mortar and pestle", "An evaporating dish", "A measuring cylinder"], c: 1, exp: "A mortar and pestle are used to grind and crush solid materials in the laboratory." },
+    { q: "What are the products when calcium carbonate reacts with hydrochloric acid?", a: ["No reaction happens", "Calcium chloride and hydrogen gas", "Calcium chloride, carbon dioxide, and water", "Calcium oxide and water"], c: 2, exp: "Carbonates react with hydrochloric acid to form a chloride salt, carbon dioxide, and water." }
+];
+
+const reasoningQuestions = [
+    { q: "Why must a digital pH probe be rinsed thoroughly with pure water between consecutive tests of different household liquids?", exp: "Rinsing with pure water removes any remaining traces of the previous solution from the probe. Without this step, cross-contamination would occur, altering the pH of the next liquid and leading to an inaccurate reading." },
+    { q: "Why can carbon be used to extract iron from iron oxide inside a blast furnace, but cannot be used to extract aluminium from aluminium oxide?", exp: "A substance can only reduce a metal oxide if it is more reactive than the metal itself. Carbon is more reactive than iron, so it can displace iron from iron oxide. However, aluminium is more reactive than carbon, meaning carbon cannot remove the oxygen from aluminium oxide. Aluminium must be extracted using electrolysis instead." },
+    { q: "Why does the reaction between an iron nail and copper sulfate solution cause the blue liquid to turn green while depositing a pinkish-brown solid on the nail?", exp: "This is a displacement reaction. Iron is more reactive than copper and displaces it from the solution. As iron dissolves to form green iron sulfate, the blue color of the copper sulfate fades. The displaced copper ions form a solid pinkish-brown coating on the surface of the nail." },
+    { q: "Why does an indigestion tablet cause the pH of hydrochloric acid to rise from 1 toward 7, and how does this relieve discomfort?", exp: "Indigestion tablets contain bases or alkalis that react with hydrochloric acid in a neutralization reaction. This reaction reduces the concentration of acid particles, causing the pH to rise toward neutral (7). In the stomach, this neutralizes excess acid to relieve indigestion discomfort." },
+    { q: "Why does complete combustion of a fuel produce a safe gas, while incomplete combustion of the same fuel poses a lethal health hazard?", exp: "Complete combustion occurs in a plentiful supply of oxygen, producing non-toxic carbon dioxide and water. Incomplete combustion occurs when oxygen is limited, producing toxic carbon monoxide gas, which can be lethal, or carbon soot particles, which cause respiratory problems." }
+];
+
+const theoryQuestions = [
+    { q: "Detail the properties of the three subatomic particles that make up an atom, including their relative mass, electrical charge, and location.", exp: "1) Protons have a relative mass of 1, an electrical charge of +1, and are located in the nucleus. 2) Neutrons have a relative mass of 1, a charge of 0 (neutral), and are also located in the nucleus. 3) Electrons have a mass of 0 (negligible) and a charge of -1, and they orbit the nucleus in shells." },
+    { q: "State the three general word equations for reactions between metals and hydrochloric, sulfuric, and nitric acids, naming the type of salt each acid forms.", exp: "1) Metal + Hydrochloric Acid -> Metal Chloride + Hydrogen. 2) Metal + Sulfuric Acid -> Metal Sulfate + Hydrogen. 3) Metal + Nitric Acid -> Metal Nitrate + Hydrogen. Hydrochloric acid forms chlorides, sulfuric acid forms sulfates, and nitric acid forms nitrates." },
+    { q: "Describe the two chemical steps that produce carbon monoxide gas inside an industrial blast furnace.", exp: "Step 1: Coke (carbon) reacts with oxygen gas in an oxidation reaction to form carbon dioxide gas: C + O2 -> CO2. Step 2: The carbon dioxide gas rises and reacts with more hot carbon to form carbon monoxide gas: CO2 + C -> 2CO. This carbon monoxide then acts as the reducing agent." },
+    { q: "Outline the step-by-step laboratory method used to produce pure, dry copper sulfate crystals from copper oxide and sulfuric acid.", exp: "Step 1: Add excess powdered copper oxide to a measured volume of sulfuric acid to ensure all the acid reacts. Step 2: Filter the mixture to remove the unreacted copper oxide and collect the copper sulfate solution. Step 3: Heat the copper sulfate solution gently in an evaporating dish over a Bunsen burner. Step 4: Allow the remaining water to evaporate slowly so that blue copper sulfate crystals form." },
+    { q: "Explain the difference between a chemical base and a soluble alkali, and describe the five sub-ranges of the pH scale.", exp: "A base is any substance that can neutralize an acid. An alkali is a specific type of base that dissolves in water. The pH scale sub-ranges are: pH 1-2 (strong acids), pH 3-6 (weak acids), pH 7 (neutral), pH 8-11 (weak alkalis), and pH 12-14 (strong alkalis)." }
+];
+
+// Populate MCQ Layout
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Populate Written Layout
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${index + 1}. ${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your answers here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Official Marking Scheme Guide:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+
+// Grade function
+function gradeMasterQuiz() {
+    let score = 0;
+    
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        expBox.style.display = 'block';
+
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<reasoningQuestions.length; i++) {
+        document.getElementById(`reason-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<theoryQuestions.length; i++) {
+        document.getElementById(`theory-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
