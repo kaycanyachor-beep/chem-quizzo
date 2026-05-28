@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 Religious Education Assessment</title>
+    <style>
+        :root {
+            --primary: #023e8a;
+            --primary-dark: #03045e;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #e3f2fd;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f4f8;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #eef1f6;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        .feedback {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 Religious Education Module Quiz</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Complete all sections of this revision test. Answer the 60 multiple-choice questions, then type your historical and theological arguments into the written response text boxes. Click <strong>"Submit Test"</strong> at the bottom to receive your instant score and read detailed model explanations under every single question.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Quiz Completed!</h2>
+        <div class="score-display" id="final-score">0 / 60</div>
+        <p>Your multiple-choice questions have been checked automatically. Scroll down to review the model answers and explanations for every section!</p>
+    </div>
+
+    <form id="re-form">
+        <div class="section-heading">Part 1: Multiple Choice Questions (1 - 60)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 2: Reasoning Questions</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 3: Theory Questions</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Test & Show Explanations</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    // 1-10: St Luke & Holy Spirit
+    { q: "Around which years did St Luke write his Gospel?", a: ["30-40 CE", "50-60 CE", "80-90 CE", "100-110 CE"], c: 2, exp: "Luke wrote his Gospel in around 80-90 CE." },
+    { q: "What background did St Luke have?", a: ["He was a Jewish priest", "He was a Gentile", "He was a Roman soldier", "He was a tax collector"], c: 1, exp: "St Luke was a Gentile." },
+    { q: "Which tax collector's story is uniquely found in Luke's Gospel?", a: ["Matthew", "Mark", "Zacchaeus", "John"], c: 2, exp: "In his Gospel, he wrote the story of Jesus and Zacchaeus the tax collector." },
+    { q: "What do many stories in Luke's Gospel show about Jesus?", a: ["That he wanted to build an earthly palace", "That he is the saviour of the whole world", "That he only came to help Gentiles", "That he was a warrior king"], c: 1, exp: "His Gospel includes many stories to show that Jesus is the saviour of the whole world." },
+    { q: "Why do we know St Luke was wealthy?", a: ["He owned many Roman ships", "He was able to read and write", "He was a king of an Anglo-Saxon realm", "He collected taxes for the empire"], c: 1, exp: "Luke was wealthy as he was able to read and write, which a lot of people would not have been able to do at the time." },
+    { q: "Who is the third person of the Trinity?", a: ["The Father", "The Son", "The Holy Spirit", "The Virgin Mary"], c: 2, exp: "The Holy Spirit is the third person of the Trinity, true God, who Christians believe inspires people." },
+    { q: "What do Catholics believe the Holy Spirit represents in the world?", a: ["A historical document", "God's presence and activity in the world", "An earthly king's spirit", "A physical dove that stays in Rome"], c: 1, exp: "Catholics believe that the Holy Spirit is God's presence and activity in the world." },
+    { q: "The Holy Trinity is composed of which three persons?", a: ["Father, Son, and Mary", "Father, Son, and Holy Spirit", "Abraham, Moses, and David", "The Pope, Bishops, and Priests"], c: 1, exp: "The Holy Spirit is part of the Holy Trinity, alongside the Father and the Son." },
+    { q: "Which angel appeared to Mary during the Annunciation in Luke's Gospel?", a: ["Michael", "Raphael", "Gabriel", "Uriel"], c: 2, exp: "In Luke's Gospel, angel Gabriel appears to Mary." },
+    { q: "What did the angel tell Mary about her relative Elizabeth?", a: ["She was moving to Jerusalem", "She was now pregnant despite being very old", "She had become a tax collector", "She was an unfree peasant"], c: 1, exp: "The angel tells Mary her relative Elizabeth (who was very old and couldn't have children) is now pregnant." },
+
+    // 11-20: Luke 1:37, Baptism, Pentecost
+    { q: "What does Luke 1:37 state about God?", a: ["God only helps wealthy kings", "For nothing is impossible with God", "God created the world in 10 days", "God chooses leaders based on gender"], c: 1, exp: "Luke 1:37 states: 'For nothing is impossible with God'." },
+    { q: "What happened while Jesus was praying after his baptism?", a: ["A storm hit the river", "Heaven was opened", "A temple was built", "The Roman army arrived"], c: 1, exp: "While he was praying, heaven was opened." },
+    { q: "In what bodily form did the Holy Spirit descend upon Jesus at his baptism?", a: ["Tongues of fire", "A violent wind", "Like a dove", "A human being"], c: 2, exp: "The Holy Spirit came down upon him in bodily form like a dove." },
+    { q: "What did the voice from heaven say at Jesus' baptism?", a: ["You must obey the Roman law", "You are my own dear Son. I am pleased with you.", "Go and rebuild the temple", "Build aqueducts for the towns"], c: 1, exp: "A voice came from heaven, 'You are my own dear Son. I am pleased with you.'" },
+    { q: "What sound was heard suddenly from heaven on the day of Pentecost?", a: ["A song of praise", "The blowing of a violent wind", "A great thunder crack", "The sound of church bells"], c: 1, exp: "Suddenly a sound like the blowing of a violent wind came from heaven and filled the whole house." },
+    { q: "What visual sign came to rest on each person at Pentecost?", a: ["Doves of peace", "Tongues of fire", "Water droplets", "Gold crowns"], c: 1, exp: "They saw what seemed to be tongues of fire that separated and came to rest on each of them." },
+    { q: "What miracle did the disciples perform immediately after being filled with the Holy Spirit?", a: ["They walked on water", "They began to speak in other tongues", "They vanished from sight", "They turned water into wine"], c: 1, exp: "All of them were filled with the Holy Spirit and began to speak in other tongues as the Spirit enabled them." },
+    { q: "Where were the God-fearing Jews staying when Pentecost happened?", a: ["Rome", "Alexandria", "Jerusalem", "Bangladesh"], c: 2, exp: "Now there were staying in Jerusalem God-fearing Jews from every nation under heaven." },
+    { q: "Why was the crowd bewildered when they gathered at Pentecost?", a: ["Because the house had fallen down", "Because each one heard their own language being spoken", "Because the disciples were wearing red vestments", "Because it started to rain fire"], c: 1, exp: "A crowd came together in bewilderment because each one heard their own language being spoken." },
+    { q: "From which region were the disciples who spoke at Pentecost originally from?", a: ["Rome", "Mesopotamia", "Galilee", "Egypt"], c: 2, exp: "The crowd asked: 'Aren't all these who are speaking Galileans?'" },
+
+    // 21-30: Acts 10, Church & Confirmation
+    { q: "What did Peter understand about God in Acts 10:34?", a: ["God shows no particularity", "God prefers wealthy nations", "God only listens to Jewish laws", "God does not want any change"], c: 0, exp: "Peter said: 'Truly I understand that God shows no particularity, but in every nation anyone who fears him and does what is right is acceptable to him'." },
+    { q: "Why was Pentecost important for the mission of the apostles?", a: ["It gave them financial wealth", "It enabled them to perform the mission Jesus gave them", "It built them a stone stronghold", "It helped them escape to France"], c: 1, exp: "Pentecost was important since the Holy Spirit enabled the apostles to perform the mission that Jesus had given them." },
+    { q: "What is Pentecost often called in relation to the Church?", a: ["The final goal", "The birthday of the Church", "The secret covenant", "The ordinary council"], c: 1, exp: "Pentecost is the birthday of the Church." },
+    { q: "What was the specific mission of the Holy Spirit at Pentecost?", a: ["To help the apostles take the message of the Good News of God's love to others", "To build a library of books", "To change the social structure of Rome", "To start a rebellion"], c: 0, exp: "The Holy Spirit's mission was to help the apostles to take the message of the Good News of God's love to others." },
+    { q: "According to Catechism paragraph 686, when was the Holy Spirit at work with the Father and Son?", a: ["Only after Jesus died", "From the beginning", "Only during the 16th century", "Since the Big Bang theory was accepted"], c: 1, exp: "The Catechism teaches that the Holy Spirit was 'at work with the Father and the Son from the beginning' (CCC 686)." },
+    { q: "What does the Creed explain about the Holy Spirit's role in the Bible?", a: ["It was only added at the end", "It has acted through the whole story of the Bible", "It was written by Arius", "It replaced the Old Testament laws"], c: 1, exp: "The Creed explains that the Holy Spirit has acted through the whole story of the Bible." },
+    { q: "What text does Galatians 4:6 record about the Spirit in our hearts?", a: ["Let there be light", "Abba! Father!", "Ashes to ashes", "Sanctus, Sanctus, Sanctus"], c: 1, exp: "Galatians 4:6 states: 'God has sent the Spirit of his Son into our hearts, crying \"Abba! Father!\"'" },
+    { q: "What is the definition of 'The Church' in the notes?", a: ["A stone castle for safety", "The community of Jesus' followers", "A collection of 73 scriptural books", "A meeting of global bishops"], c: 1, exp: "The Church is the community of Jesus' followers." },
+    { q: "Which Creed states belief in the 'holy Catholic Church and the communion of saints'?", a: ["The Julian Creed", "The Nicene Creed", "The Apostolic Letter", "The Laudato Si"], c: 1, exp: "In the Nicene Creed, Christians state that they believe in the holy Catholic Church and the communion of saints." },
+    { q: "Who makes up the community of the Church?", a: ["Only living people who go to Mass", "All Christians - those who are alive and those who have already died", "Only the twelve apostles", "Only bishops invited by the Pope"], c: 1, exp: "The community is made up of all Christians - those who are alive and those who have already died." },
+
+    // 31-40: CST, Sacraments & Councils
+    { q: "Why is the Church called the 'People of God'?", a: ["Because it has a strict layout", "Because God unites the members, making them unlike any other nation", "Because it is a political empire", "Because it was created in AD 927"], c: 1, exp: "The People of God is a special nation or community who are unlike any other nation due to God uniting the members." },
+    { q: "What does the image of the Church as the 'Body of Christ' emphasize?", a: ["That only leaders matter", "That all Christians are united together and individual roles are important", "That it has physical brick walls", "That it is purely symbolic without real activity"], c: 1, exp: "The Body of Christ helps Christians understand that they are all united together and that the role each individual plays is important." },
+    { q: "What is the definition of the Sacrament of Confirmation?", a: ["The sacrament where water cleanses original sin", "The sacrament in which the faith of the believer is confirmed or strengthened by the Holy Spirit", "The meal commemorating the Last Supper", "The process of joining holy orders"], c: 1, exp: "Confirmation is the sacrament in which the faith of the believer is 'confirmed' or strengthened by the Holy Spirit." },
+    { q: "What are the three Sacraments of Initiation?", a: ["Baptism, Reconciliation, and Marriage", "Baptism, Confirmation, and Eucharist", "Holy Orders, Anointing, and Mass", "Creed, Tradition, and Magisterium"], c: 1, exp: "Confirmation is one of the Sacraments of Initiation, alongside Baptism and the Eucharist." },
+    { q: "What does celebrating all three Sacraments of Initiation mean for a person?", a: ["They must become a priest", "They become a full member of the Church", "They can join an ecumenical council", "They must move to Jerusalem"], c: 1, exp: "When these three sacraments have been celebrated, a person is a full member of the Church." },
+    { q: "What historical event can the Sacrament of Confirmation be traced back to?", a: ["The Council of Jerusalem", "The story of Pentecost in Acts 2:1-12", "The 16th-century Reformation", "The signing of the UN goals"], c: 1, exp: "Confirmation can be traced back to the story of Pentecost in Acts 2:1-12 where the Holy Spirit empowered Jesus' apostles." },
+    { q: "How many Gifts of the Holy Spirit are given at Confirmation?", a: ["Three", "Five", "Seven", "Twelve"], c: 2, exp: "Gifts of the Holy Spirit: seven spiritual gifts given by the Holy Spirit at Confirmation." },
+    { q: "Which of the following is a Fruit of the Holy Spirit mentioned in the notes?", a: ["Might", "Piety", "Kindness", "Counsel"], c: 2, exp: "Fruits of the Holy Spirit include love, joy, and kindness." },
+    { q: "What did St Paul mean when he wrote 'Walk by the Spirit'?", a: ["To travel to Galatia on foot", "To allow ourselves to be led by the Holy Spirit", "To write letters to bishops", "To speak different physical languages"], c: 1, exp: "St Paul means we need to allow ourselves to be led by the Holy Spirit." },
+    { q: "What color vestments do priests wear at Pentecost to symbolize tongues of fire?", a: ["Green", "White", "Red", "Purple"], c: 2, exp: "Priests wear red vestments to symbolise the tongues of fire that came to the disciples." },
+
+    // 41-50: Lived Religion, Incarnation & Arius
+    { q: "How do churches in Italy visually celebrate Pentecost?", a: ["They display green branches outside", "They scatter rose petals through the ceiling", "They perform an outdoor procession", "They write illuminated manuscripts"], c: 1, exp: "Churches in Italy scatter rose petals through the ceiling to symbolise the tongues of fire." },
+    { q: "What is an ecumenical council?", a: ["A collection of biblical idioms", "A meeting of bishops of the worldwide Church at the invitation of the Pope", "A division inside a local parish", "A list of sustainable development goals"], c: 1, exp: "Ecumenical council: a meeting of bishops of the worldwide Church at the invitations of the Pope, to decide on matters of the Church." },
+    { q: "Around which year did the apostles call the Council of Jerusalem?", a: ["55 BC", "AD 43", "Around AD 48", "1996"], c: 2, exp: "The apostles called the Council of Jerusalem around AD 48." },
+    { q: "What is a 'schism'?", a: ["A formal gathering for prayer", "A split or division within a group", "The translation of an old text", "A song sung three times"], c: 1, exp: "Schism: a split or division within a group." },
+    { q: "Which major event caused the biggest schism in the 16th Century?", a: ["The Council of Jerusalem", "The Protestant Reformation", "The Big Bang theory", "The death of Sister Dorothy Stang"], c: 1, exp: "The biggest schism took place because of the Protestant Reformation in the 16th Century." },
+    { q: "What is the definition of ecumenism?", a: ["The translation of the Bible into modern English", "The aim of promoting unity among the Christian Churches of the world", "The stewardship of looking after the rainforest", "The process of interpreting creation stories"], c: 1, exp: "Ecumenism: the aim of promoting unity among the Christian Churches of the world." },
+    { q: "What does the word 'Incarnation' mean for Christians?", a: ["That God is three separate Gods", "That God became man in the person of Jesus, truly human and truly divine", "The transition of a soul into a dove", "The compilation of the New Testament library"], c: 1, exp: "Incarnation: Christians believe that God became man in the person of Jesus, truly human and truly divine ('became flesh')." },
+    { q: "Who was Arius?", a: ["A Catholic priest who discovered the Big Bang", "A Christian elder in 4th Century Alexandria who questioned Church teachings", "An American Franciscan friar who died on 9/11", "A prophet who wrote a book in the Old Testament"], c: 1, exp: "Arius was a Christian elder who lived in the 4th Century in Alexandria in Egypt... questioning some of the teachings of the Church." },
+    { q: "What title of Jesus suggests he is both divine and human and connects to the Messiah?", a: ["Son of David", "Son of Man", "Bretwalda", "Gentile savior"], c: 1, exp: "Son of Man: A title of Jesus which suggests that he is both divine and human; it connects to the idea of him as a Messiah." },
+    { q: "What Old Testament books predict the Messiah's throne from the line of David?", a: ["Genesis and Timothy", "2 Samuel and 1 Kings", "Galatians and Acts", "The Torah and the Gospels"], c: 1, exp: "Predictions about the Messiah as the Son of David are made in 2 Samuel 7:16 and 1 Kings 9:5." },
+
+    // 51-60: Trinity, Mass & Scripture
+    { q: "What does the word 'Sanctus' mean, and how many times is it repeated in the Eucharistic prayer?", a: ["It means peace and is said twice", "It is repeated three times as a song of praise to the Trinity", "It means amen and is sung once", "It means law and is read from the Torah"], c: 1, exp: "The Eucharistic prayer begins with a song of praise, the word 'Sanctus' is repeated three times." },
+    { q: "What document describes Jesus as 'the perfect man' and humanity as 'disfigured from the first sin onward'?", a: ["Laudato Si", "Gaudium et Spes 22", "Sacrosanctum Concilium 7", "The Nicene Creed"], c: 1, exp: "In Gaudium et Spes 22, Jesus is described as 'the perfect man' and humanity's relationship as 'disfigured from the first sin onward'." },
+    { q: "Who was Father Mychal Judge?", a: ["An American Franciscan friar and chaplain to the FDNY who died on September 11, 2001", "A bishop from Bangladesh who discussed food insecurity", "A priest who first proposed the Big Bang theory", "The artist who painted the Genesis Frontispiece"], c: 0, exp: "Father Mychal Judge was an American Franciscan friar, Catholic priest, and chaplain to the FDNY who became the first certified fatality of the September 11 attacks." },
+    { q: "What term describes the Catholic belief that bread and wine become the actual flesh and blood of Christ?", a: ["Commemoration", "Transubstantiation", "Incarnation", "Revelation"], c: 1, exp: "Catholics believe that the bread and wine become the actual flesh and blood of Jesus Christ. This belief is known as transubstantiation." },
+    { q: "Which leader stated that a lack of food for the poor is the most 'un-eucharistic situation on earth'?", a: ["Pope Francis", "Bishop Theotonius Gomes from Bangladesh", "Father Lemaitre", "Sister Dorothy Stang"], c: 1, exp: "Bishop Theotonius Gomes from Bangladesh said that a lack of food for the poor is the most 'un-eucharistic situation on earth'." },
+    { q: "What is 'revelation' in Catholic teaching?", a: ["The physical movement of people to different countries", "The way in which God is made known to humans, most perfectly through Jesus", "The strict application of old calendar frameworks", "A division between different groups in a church"], c: 1, exp: "Revelation: the way in which God is made known to humans, which Catholics believe is most perfectly done through Jesus." },
+    { q: "Who first put forward the scientific view known as the Big Bang theory?", a: ["Prof Stephen Hawking", "A Catholic priest, Father Lemaitre", "Pope St John Paul II", "Donald Jackson"], c: 1, exp: "The Big Bang theory was first put forward by a Catholic priest, Father Lemaitre." },
+    { q: "What phrase describes the concept that humans are made in the image of God?", a: ["Abba Father", "Imago Dei", "Missio", "Sacrosanctum"], c: 1, exp: "Imago Dei: A Latin phrase meaning 'in the image of God', the idea that humans reflect God's nature." },
+    { q: "What encyclical by Pope Francis targets environmental crisis and the cry of the poor?", a: ["Gaudium et Spes", "Laudato Si", "The Nicene Creed", "Sacrosanctum Concilium"], c: 1, exp: "Pope Francis' encyclical, Laudato Si, tells Catholics to respond to both the cry of the earth and the cry of the poor." },
+    { q: "Why is Sister Dorothy Stang considered a martyr by many?", a: ["She wrote a book of the New Testament", "She was murdered because of her faith-motivated campaigns to protect the rainforest", "She translated the King James Version", "She helped establish the Council of Jerusalem"], c: 1, exp: "Sr Dorothy Stang was murdered in Brazil on 12 February 2005 by wealthy landowners due to her campaigns. Many call her a martyr, meaning she died for her faith." }
+];
+
+const reasoningQuestions = [
+    { q: "Why did the early followers of Jesus hold the Council of Jerusalem?", exp: "According to the notes, the early followers were Jewish. As the Church expanded to Gentiles (non-Jewish people), they were unsure of what rules Gentiles needed to follow. They met around AD 48 to resolve two specific questions: 1) Do gentiles need to become Jews before they can become Christians? 2) Do gentiles have to observe Jewish Law after they become Christian?" },
+    { q: "Why do Catholics believe the Old Testament is essential for understanding Jesus?", exp: "The notes state that the Old Testament shows the beginning of God's revelation to humans and unfolds His plan for humanity. The Youth Catechism explicitly teaches that 'without the Old Testament, we cannot understand Jesus' (YC 17)." },
+    { q: "Why was the Protestant Reformation a significant event in Christian history?", exp: "The notes explain that the Protestant Reformation in the 16th Century was the biggest schism (split or division) in the Church's history, leading to new Christian communities separate from the Catholic Church, such as when Henry VIII fell out with the Pope over divorce, resulting in the creation of the Church of England." }
+];
+
+const theoryQuestions = [
+    { q: "Explain Church teaching on the Holy Spirit as reflected in the Catechism and Creeds.", exp: "The Catechism teaches the Holy Spirit was at work with the Father and the Son from the beginning (CCC 686). The Creed reflects that He is present before acts of creation, has acted through the whole story of the Bible, and still guides Catholics today, making it clear He is completely God." },
+    { q: "Describe the structure of the Catholic Mass.", exp: "The Mass has two main parts according to the notes: 1) The Liturgy of the Word (which includes the gathering, readings, homily, and general intercessions) where we hear how God cares for us, and 2) The Liturgy of the Eucharist (including presentation of bread/wine, consecratory thanksgiving, Holy Communion, and Concluding Rites) where believers receive Jesus and are sent out to spread God's word." },
+    { q: "What is the difference between literal and non-literal interpretations of the Bible according to Catholics?", exp: "Most Catholics do not read the Bible literally (meaning they do not think it is word-for-word historically or scientifically true). Instead, they interpret it to find God's truth (e.g., revealing God as creator in Genesis). In 1996, Pope St John Paul II taught that scientific theories like evolution are not at odds with the Bible because creation stories reveal the spiritual purpose of humans, while science explains how physical life developed." },
+    { q: "Identify and explain the concept of Stewardship and how it connects to modern campaigns.", exp: "Stewardship is the task of looking after and caring for the world for God, meaning humans are environmentally responsible for their contribution. This is practiced through modern campaigns like CAFOD's 'Care for the Common Home' (based on Pope Francis' Laudato Si), which demands action to protect creation and respond to the cry of the earth and the poor against environmental crises." },
+    { q: "What are the three sources of authority that form the 'three-legged stool' of Catholic teaching?", exp: "The three sources of authority mentioned are Sacred Scripture (the inspired word of God), Sacred Tradition (the original actions and preaching flowing from the 12 apostles), and the Magisterium (the teaching authority of the Church formed of the Bishops, which includes ordinary, conciliar, and pontifical levels)." }
+];
+
+// Dynamically Populate Multiple Choice
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Dynamically Populate Written Written Blocks
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your notes-based answer here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Notes Model Answer:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+
+// Grade Assessment Layout
+function gradeQuiz() {
+    let score = 0;
+    
+    // Check Multiple Choice
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        expBox.style.display = 'block';
+
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Explanation:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Explanation:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Explanation:</strong> ${data.exp}`;
+        }
+    });
+
+    // Reveal Written Keys
+    for(let i=0; i<reasoningQuestions.length; i++) {
+        document.getElementById(`reason-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<theoryQuestions.length; i++) {
+        document.getElementById(`theory-exp-${i}`).style.display = 'block';
+    }
+
+    // Header Display Update
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
