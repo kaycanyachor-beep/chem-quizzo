@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 8 Chemistry Module 3 Revision</title>
+    <style>
+        :root {
+            --primary: #4e5180;
+            --primary-dark: #2b2d42;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #e8eaf6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #d8f3dc;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #b7e4c7;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: #1b4332;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: #e8eaf6;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 8 Chemistry Module 3 Assessment</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Complete all 60 multiple-choice questions focusing on Acids, Alkalis, Indicators, and Neutralisation. Then attempt the written sections. Click <strong>"Submit Answers"</strong> at the base of the page to generate your instant score and unlock model explanatory notes for every section.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Marking Summary</h2>
+        <div class="score-display" id="final-score">0 / 60</div>
+        <p>Review your answers below. Explanations have been revealed under each item.</p>
+    </div>
+
+    <form id="chem-form-m3">
+        <div class="section-heading">Part 1: Acids & Alkalis Multiple Choice (1 - 60)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 2: Scientific Reasoning Questions</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 3: Practical Theory Questions</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Answers & Review Explanations</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    // 1-10: Concentration Definitions, Scale Ranges & Probe Safety
+    { q: "What distinguishes a concentrated acid from a dilute acid?", a: ["Concentrated acid weighs less per litre", "Concentrated acid has more acid particles per litre", "Concentrated acid contains no hydrogen particles", "Dilute acid contains no water"], c: 1, exp: "A concentrated acid will have more acid particles per litre than a dilute acid." },
+    { q: "What is the formula for Sulfuric acid?", a: ["HCl", "HNO3", "H2SO4", "NaOH"], c: 2, exp: "The chemical formula for sulfuric acid is H2SO4." },
+    { q: "What is the chemical formula for hydrochloric acid?", a: ["HNO3", "HCl", "H2SO4", "NaOH"], c: 1, exp: "Hydrochloric acid is represented by HCl." },
+    { q: "What is the formula for Nitric acid?", a: ["HNO3", "HCl", "H2SO4", "NaOH"], c: 0, exp: "Nitric acid has the formula HNO3." },
+    { q: "What is the name of the well-known alkali with the formula NaOH?", a: ["Calcium carbonate", "Sodium hydroxide", "Copper oxide", "Hydrochloric hydroxide"], c: 1, exp: "NaOH stands for Sodium hydroxide." },
+    { q: "What does an indicator do when placed into solutions with differing pH values?", a: ["It causes an explosion", "It undergoes a change in colour", "It evaporates immediately", "It solidifies the liquid"], c: 1, exp: "An indicator is a solution that changes colour to determine the pH of a solution." },
+    { q: "What colour does universal indicator turn when added to acidic solutions?", a: ["Blue", "Purple", "Green", "Red"], c: 3, exp: "Universal indicator turns red in acidic solutions." },
+    { q: "What colour does universal indicator display in alkaline solutions?", a: ["Red", "Yellow", "Blue", "Orange"], c: 2, exp: "Universal indicator turns blue (and purple) in alkaline solutions." },
+    { q: "How does blue litmus paper behave when introduced to an acid?", a: ["It turns blue green", "It stays blue", "It turns red", "It turns yellow"], c: 2, exp: "Blue litmus paper turns red in acids." },
+    { q: "How does red litmus paper react when placed in an alkali solution?", a: ["It turns blue", "It stays red", "It turns yellow", "It turns colourless"], c: 0, exp: "Red litmus paper turns blue in alkali solutions." },
+
+    // 11-20: Household Solution Classification
+    { q: "What is the specific pH value of pure water?", a: ["2.2", "4.4", "7.0", "9.9"], c: 2, exp: "Pure water has a neutral pH reading of 7.0." },
+    { q: "How is pure water classified based on its pH scale value?", a: ["Acidic", "Alkaline", "Neutral", "Strong acid"], c: 2, exp: "A pH of 7.0 makes pure water a neutral solution." },
+    { q: "What pH value does lemon juice show when tested with an accurate digital probe?", a: ["2.2", "7.0", "9.9", "14.0"], c: 0, exp: "Lemon juice has an acidic pH reading of 2.2." },
+    { q: "How is lemon juice classified on the scale?", a: ["Alkali", "Neutral", "Acidic", "Strong alkali"], c: 2, exp: "Lemon juice is acidic due to its low pH." },
+    { q: "What accurate pH probe value is recorded for toothpaste?", a: ["2.2", "4.4", "7.4", "9.9"], c: 3, exp: "Toothpaste registers an alkaline pH reading of 9.9." },
+    { q: "Based on a pH of 9.9, what type of solution is toothpaste?", a: ["Acid", "Alkali", "Neutral", "Strong acid"], c: 1, exp: "Toothpaste is an alkali solution." },
+    { q: "What pH reading is recorded for blood in the experimental data?", a: ["2.2", "4.4", "7.4", "9.9"], c: 2, exp: "The exam data marks blood with a pH reading of 7.4." },
+    { q: "Based on its pH of 7.4, blood is considered to be what?", a: ["Acidic", "Alkaline", "Neutral", "Strong acid"], c: 1, exp: "A pH of 7.4 is above 7, meaning it falls into the alkaline category." },
+    { q: "What pH probe value corresponds to tomato juice?", a: ["2.2", "4.4", "7.0", "9.9"], c: 1, exp: "Tomato juice displays a pH reading of 4.4." },
+    { q: "What type of solution is tomato juice?", a: ["Acid", "Alkali", "Neutral", "Strong alkali"], c: 0, exp: "With a pH of 4.4, tomato juice is an acid." },
+
+    // 21-30: Universal Indicator & Probe Accuracy Mechanics
+    { q: "Why is using a digital pH probe superior to using universal indicator paper?", a: ["It changes color faster", "It gives a more accurate result", "It can neutralize solutions on contact", "It uses natural blackberry juice"], c: 1, exp: "A pH probe gives a more accurate numerical result rather than guessing a color shade." },
+    { q: "Why must a pH probe be dipped in pure water between testing different liquids?", a: ["To charge its electrical unit", "To make sure it is clean and not contaminated by the liquid before", "To adjust its pH scale up to 14", "To coat it with an acid indicator layer"], c: 1, exp: "Rinsing with pure water ensures previous liquid traces do not contaminate the next test." },
+    { q: "What household substance turns universal indicator purple, identifying it as an alkali?", a: ["Tomato juice", "Bleach", "Stomach acid", "Vinegar"], c: 1, exp: "Bleach turns universal indicator purple, demonstrating its identity as an alkali." },
+    { q: "What colour does tomato juice produce in universal indicator, according to the test charts?", a: ["Red", "Yellow", "Purple", "Bottle green"], c: 1, exp: "Tomato juice changes universal indicator to a yellow color." },
+    { q: "What household cleaner turns universal indicator dark purple?", a: ["Tomato juice", "Drain cleaner", "Vinegar", "Water"], c: 1, exp: "Drain cleaner turns universal indicator dark purple, marking it as a strong alkali." },
+    { q: "What color does soap solution turn universal indicator, identifying it as an alkali?", a: ["Red", "Yellow", "Bottle green", "Bright red"], c: 2, exp: "Soap turns universal indicator bottle green, marking it as an alkali." },
+    { q: "What color does stomach acid turn universal indicator, proving it is a strong acid?", a: ["Red", "Yellow", "Bottle green", "Purple"], c: 0, exp: "Stomach acid changes universal indicator to red." },
+    { q: "What is vinegar classified as on the household solution chart?", a: ["Acid", "Alkali", "Neutral", "Strong alkali"], c: 0, exp: "Vinegar is listed and confirmed as an acid." },
+    { q: "What is oven cleaner classified as on the data table?", a: ["Acid", "Neutral", "Alkali", "Water option"], c: 2, exp: "Oven cleaner is classified as an alkali." },
+    { q: "What label corresponds to a pH range of 1 to 2 on the continuous scale?", a: ["Strong Acid", "Weak Acid", "Neutral", "Strong Alkali"], c: 0, exp: "The pH scale marks the lowest values (1-2) as strong acids." },
+
+    // 31-40: Acid Salt Tracking & Structural Neutralisation Anagrams
+    { q: "What label corresponds to a pH range of 3 to 6 on the scale?", a: ["Strong Acid", "Weak Acid", "Neutral", "Strong Alkali"], c: 1, exp: "Values from 3 to 6 represent weak acids." },
+    { q: "What classification matches a pH value of exactly 7?", a: ["Weak Acid", "Neutral", "Weak Alkali", "Strong Alkali"], c: 1, exp: "A pH of 7 is precisely neutral." },
+    { q: "What label matches a pH range of 8 to 11 on the scale?", a: ["Strong Acid", "Weak Acid", "Weak Alkali", "Strong Alkali"], c: 2, exp: "Values from 8 to 11 represent weak alkalis." },
+    { q: "What label matches a pH range of 12 to 14 on the scale?", a: ["Strong Acid", "Neutral", "Weak Alkali", "Strong Alkali"], c: 3, exp: "The highest values (12-14) represent strong alkalis." },
+    { q: "What process describes adding an alkali to an acid to produce a neutral solution?", a: ["Oxidation", "Crystallisation", "Neutralisation", "Electrolysis"], c: 2, exp: "Neutralisation involves adding an alkali to an acid to produce a neutral solution." },
+    { q: "What type of salt does hydrochloric acid always make?", a: ["Sulfate salt", "Chloride salt", "Nitrate salt", "Carbonate salt"], c: 1, exp: "Hydrochloric acid makes chloride salts." },
+    { q: "What type of salt does sulfuric acid always make?", a: ["Chloride salt", "Sulfate salt", "Nitrate salt", "Oxide salt"], c: 1, exp: "Sulfuric acid makes sulfate salts." },
+    { q: "What type of salt does nitric acid always make?", a: ["Chloride salt", "Sulfate salt", "Nitrate salt", "Hydroxide salt"], c: 2, exp: "Nitric acid makes nitrate salts." },
+    { q: "Unscramble the laboratory acid anagram: 'trinic ciad'", a: ["Sulfuric acid", "Hydrochloric acid", "Nitric acid", "Citric acid"], c: 2, exp: "'trinic ciad' rearranges to name nitric acid." },
+    { q: "Unscramble the laboratory acid anagram: 'sifruciu ciad'", a: ["Sulfuric acid", "Hydrochloric acid", "Nitric acid", "Acetic acid"], c: 0, exp: "'sifruciu ciad' rearranges to name sulfuric acid." },
+
+    // 41-50: Indigestion Laboratory Steps & Indicators
+    { q: "Unscramble the laboratory acid anagram: 'drochycholir ciad'", a: ["Sulfuric acid", "Hydrochloric acid", "Nitric acid", "Phosphoric acid"], c: 1, exp: "'drochycholir ciad' rearranges to name hydrochloric acid." },
+    { q: "In the indigestion tablet practical, what is the very first step?", a: ["Add a few drops of universal indicator to the acid", "Add the crushed tablet to the acid and stir well", "Measure out 25cm³ of hydrochloric acid into a measuring cylinder and pour into a beaker", "Crush the tablet into small pieces"], c: 2, exp: "Step 1 is to measure out 25cm³ of hydrochloric acid using a measuring cylinder and pour it into a beaker." },
+    { q: "What is step number 2 in the indigestion tablet experiment sequence?", a: ["Add a few drops of universal indicator to the acid and record its colour", "Add the crushed tablet to the acid and stir well", "Record the final pH value", "Boil the mixture over a Bunsen burner"], c: 0, exp: "Step 2 is to add universal indicator to the acid and record its initial color." },
+    { q: "What is step number 3 in the indigestion tablet experimental sequence?", a: ["Filter the mixture", "Take 1 indigestion tablet and crush it into small pieces", "Record the final pH of the solution", "Pour the acid down the sink"], c: 1, exp: "Step 3 is to take 1 indigestion tablet and crush it into small pieces." },
+    { q: "What is step number 4 in the indigestion tablet methodology?", a: ["Measure out 25cm³ of acid", "Add the crushed tablet to the acid and stir well", "Record the initial color of indicator", "Evaporate the solution gently"], c: 1, exp: "Step 4 is to add the crushed tablet to the acid and stir well." },
+    { q: "What is the final step (Step 5) in the indigestion tablet experimental method?", a: ["Crush another tablet", "When the indigestion tablet has dissolved, record the pH of the solution", "Add more sulfuric acid", "Filter out the indicator particles"], c: 1, exp: "Step 5 is to record the final pH of the solution once the tablet has dissolved." },
+    { q: "In the multi-part pH structural triangle diagram, what label represents vertex A?", a: ["Acid", "Neutral", "Alkali", "Salt"], c: 0, exp: "Vertex A represents Acid on the structural layout." },
+    { q: "In the multi-part pH structural triangle diagram, what label represents vertex B?", a: ["Acid", "Neutral", "Alkali", "Indicator"], c: 1, exp: "Vertex B represents Neutral on the structural chart." },
+    { q: "In the multi-part pH structural triangle diagram, what label represents vertex C?", a: ["Acid", "Neutral", "Alkali", "Base"], c: 2, exp: "Vertex C represents Alkali on the structural chart." },
+    { q: "What fruit juice is explicitly listed as an alternative indicator made by pupils?", a: ["Orange juice", "Blackberry juice", "Apple juice", "Lemon juice"], c: 1, exp: "The exam sheets note that pupils can use blackberries to make their indicator." },
+
+    // 51-60: Copper Sulfate Practical & General Concepts
+    { q: "What is the first step in the laboratory procedure for making copper sulfate crystals?", a: ["Filter the mixture to collect the unreacted solid", "Add powdered copper oxide to sulfuric acid", "Heat the solution in an evaporating dish", "Collect the dry blue crystals"], c: 1, exp: "Step 1 is to add powdered copper oxide to sulfuric acid." },
+    { q: "What is step number 2 in the crystallization process for copper sulfate?", a: ["Heat the copper sulfate solution gently", "Filter the mixture to collect the un-reacted copper oxide and collect the copper sulfate solution", "Add a few drops of universal indicator", "Boil away all the copper oxide"], c: 1, exp: "Step 2 is to filter the mixture to remove excess unreacted copper oxide and catch the solution." },
+    { q: "What is step number 3 in making copper sulfate crystals?", a: ["Add hydrochloric acid", "Place the copper sulphate solution into an evaporating dish and heat gently", "Crush the crystals into small pieces", "Measure out 25cm³ of vinegar"], c: 1, exp: "Step 3 is to transfer the copper sulfate solution into an evaporating dish and heat gently." },
+    { q: "What is the final step (Step 4) in the copper sulfate crystal practical?", a: ["Add sodium hydroxide to turn it green", "The water will evaporate and copper sulfate crystals will form in the evaporating dish", "Filter the dry liquid back into the measuring cylinder", "Record a final pH value of 2.2"], c: 1, exp: "Step 4 is allowing the water to evaporate so that copper warfare crystals form." },
+    { q: "Why are neutralisation reactions considered useful in environmental management?", a: ["They increase the concentration of acid rain", "They can be used to neutralise acidic soil or lakes", "They turn lakes into strong alkali storage blocks", "They eliminate the need for indicators"], c: 1, exp: "Neutralisation reactions are useful because they can be used to treat and neutralise overly acidic soils or lakes." },
+    { q: "What gas is released if you react an acid with a metal carbonate?", a: ["Hydrogen", "Oxygen", "Carbon dioxide", "Nitrogen"], c: 2, exp: "Acids reacting with carbonates produce a salt, water, and carbon dioxide gas." },
+    { q: "Which of the following can be used as alternative indicators alongside blackberry juice?", a: ["Sulfuric acid and nitric acid", "Red cabbage or red and blue litmus paper", "Sodium hydroxide and water", "Copper oxide and zinc filings"], c: 1, exp: "Red cabbage and litmus papers are listed as excellent alternative indicator tools." },
+    { q: "What is the word equation for a reaction between an acid and a metal carbonate?", a: ["Acid + Carbonate -> Salt + Hydrogen", "Acid + Metal Carbonate -> Salt + Carbon Dioxide + Water", "Acid + Carbonate -> Alkali + Water", "Acid + Carbonate -> No reaction"], c: 1, exp: "The general equation is Acid + Metal Carbonate -> Salt + Carbon splinter + Water." },
+    { q: "What basic equipment would students require to crush a plant substance to extract its color for an indicator?", a: ["A pH digital probe and pure water", "A mortar and pestle", "An evaporating dish and a Bunsen burner", "A measuring cylinder and filter paper"], c: 1, exp: "A mortar and pestle are used to physically crush items to release indicator pigments." },
+    { q: "What is the fundamental general word equation for a neutralisation reaction between an acid and an alkali?", a: ["Acid + Alkali -> Metal Oxide", "Acid + Alkali -> Salt + Water", "Acid + Alkali -> Metal + Hydrogen", "Acid + Alkali -> Carbonate + Gas"], c: 1, exp: "The baseline word equation for neutralization is Acid + Alkali -> Salt + Water." }
+];
+
+const reasoningQuestions = [
+    { q: "Why does the introduction of a crushed indigestion tablet alter the pH of a hydrochloric acid solution, and how does this model the process occurring inside the human stomach?", exp: "Indigestion tablets contain alkaline bases. When added to hydrochloric acid, a neutralization reaction occurs as the alkali particles react with the acid particles, reducing the overall acidity. This causes the pH value to rise toward neutral (7). This models treatment in the human stomach, where the alkaline tablet neutralizes excess stomach acid (which has a red color profile on the indicator spectrum) to relieve discomfort." },
+    { q: "Why is a filtration step essential during the preparation of pure copper sun-salt crystals from copper oxide and sulfuric acid?", exp: "To ensure that all the sulfuric acid reacts completely, excess powdered copper oxide is added to the beaker. Filtration is essential because copper oxide is an insoluble base that does not dissolve in water. Passing the mixture through filter paper traps the unreacted, solid copper oxide on the paper, while allowing the pure, dissolved copper sulfate solution to pass through into the evaporating dish." },
+    { q: "Why do some indicators like litmus paper provide less information about a solution than universal indicator, and how does a digital pH meter improve on both?", exp: "Litmus paper only provides a binary result; it changes color to show whether a solution is an acid or an alkali but cannot measure its strength. Universal indicator contains a mixture of dyes that display a spectrum of colors across the entire pH scale (1-14), indicating whether an item is strong or weak. A digital pH meter improves on both by removing human color bias and providing an exact numerical value (e.g., 10.05), making it highly accurate." }
+];
+
+const theoryQuestions = [
+    { q: "Explain the absolute chemical difference separating a base from a soluble alkali, providing an example of each from the module.", exp: "A base is any chemical substance that neutralizes an acid to form a salt and water. An alkali is a specific type of base that is soluble in water (it dissolves in water). Therefore, all alkalis are bases, but not all bases are alkalis. For example, copper oxide is a base because it neutralizes acid but does not dissolve, whereas sodium hydroxide (NaOH) is an alkali because it dissolves in water." },
+    { q: "Detail the step-by-step chemical progression for manufacturing pure copper sulfate crystals using a laboratory acid and oxide.", exp: "Based on the official method sheet: Step 1: Add excess powdered copper oxide to a measured volume of sulfuric acid to ensure all acid reacts. Step 2: Filter the mixture using filter paper and a funnel to trap the unreacted solid copper oxide and collect the blue copper sulfate solution. Step 3: Transfer the solution into an evaporating dish and heat gently over a Bunsen burner. Step 4: Allow the water to evaporate, causing pure copper sulfate crystals to form in the dish." },
+    { q: "Describe how you would design and order an experiment to extract a natural indicator from wild blackberries and test its performance.", exp: "First, place the blackberries into a mortar and crush them thoroughly using a pestle to release the colored pigments. Next, mix with a small amount of solvent and filter the liquid to get a clear blackberry indicator solution. Finally, use a spotting tile or test tubes to add a few drops of this natural indicator to various test solutions: if it changes color when moved between known acids (like lemon juice) and alkalis (like soap), it is a successful indicator." },
+    { q: "State the general word equations for the reaction of an acid with an alkali, and an acid with a metal carbonate.", exp: "According to the revision mat metrics, the two distinct general equations are: 1) For an acid reacting with an alkali: Acid + Alkali -> Salt + Water. 2) For an acid reacting with a metal carbonate: Acid + Metal Carbonate -> Salt + Carbon Dioxide + Water." },
+    { q: "Outline the continuous pH scale from 1 to 14 by breaking down its four distinct sub-ranges and identifying the characteristics of each.", exp: "The pH scale ranges from 1 to 14: 1) pH 1 to 2 represents strong acids (such as stomach acid, turning indicator red). 2) pH 3 to 6 represents weak acids (such as tomato juice or lemon juice variations, turning yellow/orange). 3) pH 7 is exactly neutral (such as pure water, turning green). 4) pH 8 to 11 represents weak alkalis (such as soap, turning bottle green). 5) pH 12 to 14 represents strong alkalis (such as bleach or drain cleaner, turning dark purple)." }
+];
+
+// Populate MCQ elements
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Populate Written elements
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your chemical explanation here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Verified Mark Scheme Answer:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+
+// Grade function
+function gradeQuiz() {
+    let score = 0;
+    
+    // Process MCQs
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        expBox.style.display = 'block';
+
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+        }
+    });
+
+    // Reveal written explanations
+    for(let i=0; i<reasoningQuestions.length; i++) {
+        document.getElementById(`reason-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<theoryQuestions.length; i++) {
+        document.getElementById(`theory-exp-${i}`).style.display = 'block';
+    }
+
+    // Show Results Window at the top
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
