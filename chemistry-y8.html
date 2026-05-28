@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 8 Chemistry Comprehensive Revision</title>
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-dark: #001219;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #e0f2f1;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #e9d8a6;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #eae2b7;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: #003049;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: #e0f2f1;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 8 Chemistry Module 2 Assessment</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Complete all 60 multiple-choice questions covering elements, atomic structure, and the reactivity series. Then complete the written sections. Click <strong>"Submit Answers"</strong> at the bottom to check your score and read detailed explanatory notes for every single item.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Marking Summary</h2>
+        <div class="score-display" id="final-score">0 / 60</div>
+        <p>Review the color-coded feedback and the chemical explanations loaded below.</p>
+    </div>
+
+    <form id="chem-form">
+        <div class="section-heading">Part 1: Reactivity & Atomic Structure Multiple Choice (1 - 60)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 2: Chemical Reasoning Questions</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 3: Advanced Theory Questions</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Answers & Review Explanations</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    // 1-10: Subatomic Particles & Data Interpretation
+    { q: "What is the relative atomic mass of a proton?", a: ["0", "1", "-1", "+1"], c: 1, exp: "The relative atomic mass of a proton is 1[cite: 5]." },
+    { q: "What is the electrical charge of an electron?", a: ["0", "+1", "-1", "2"], c: 2, exp: "The electrical charge of an electron is -1[cite: 5]." },
+    { q: "Which subatomic particle has a mass of 1 and a charge of 0?", a: ["Proton", "Electron", "Neutron", "Nucleus"], c: 2, exp: "A neutron has a relative mass of 1 and a neutral charge of 0[cite: 5]." },
+    { q: "Based on the provided melting point data table, which metal has the highest melting point?", a: ["Sodium", "Gold", "Mercury", "Iron"], c: 3, exp: "Iron has the highest melting point at 1540°C[cite: 6, 7]." },
+    { q: "Which metal exists as a liquid at room temperature due to a melting point of -37°C?", a: ["Sodium", "Iron", "Mercury", "Gold"], c: 2, exp: "Mercury has the lowest melting point at -37°C, making it a liquid at room temperature[cite: 6, 7]." },
+    { q: "What is the melting point of Sodium?", a: ["1540°C", "1064°C", "98°C", "-37°C"], c: 2, exp: "According to the practice data, the melting point of sodium is 98°C[cite: 6, 7]." },
+    { q: "When gold is heated from room temperature to 1070°C, what state change occurs?", a: ["Liquid to gas", "Solid to gas", "Solid to liquid", "Liquid to solid"], c: 2, exp: "Since gold melts at 1064°C, heating it to 1070°C changes it from a solid to a liquid[cite: 6, 7]." },
+    { q: "If 5g of gold is melted and poured into a star mould, what is the mass of the final pendant?", a: ["2.5g", "5g", "10g", "0g"], c: 1, exp: "The mass remains 5g due to the conservation of mass during physical state changes[cite: 6, 7]." },
+    { q: "Which metal bursts into flames straight away when heated in air?", a: ["Iron", "Mercury", "Gold", "Sodium"], c: 3, exp: "Sodium reacts vigorously, bursting into flames straight away when heated in air[cite: 7]." },
+    { q: "What visual product is formed when Mercury is heated slowly in air?", a: ["Black powder", "A bright white flame", "A red powder", "No change occurs"], c: 2, exp: "Mercury slowly forms a red powder when heated in air[cite: 7]." },
+
+    // 11-20: Periodic Table Regions & Basic Equations
+    { q: "What element matches the chemical symbol H?", a: ["Helium", "Mercury", "Hydrogen", "Hafnium"], c: 2, exp: "The chemical symbol H stands for Hydrogen[cite: 6, 7]." },
+    { q: "In which region of the outline Periodic Table diagram are non-metals like oxygen and chlorine located?", a: ["Region 1", "Region 2", "Region 3", "The bottom rows"], c: 2, exp: "Region 3 on the far right represents the non-metals section[cite: 6, 7]." },
+    { q: "Where are highly reactive alkali metals like sodium and potassium found on the periodic table outline?", a: ["Region 1", "Region 2", "Region 3", "Transition block"], c: 0, exp: "Region 1 on the far left contains the highly reactive alkali metals[cite: 6, 7]." },
+    { q: "Where are the less reactive transition metals like copper and zinc classified in the periodic table outline?", a: ["Region 1", "Region 2", "Region 3", "Group 0"], c: 1, exp: "Region 2 represents the central block where less reactive transition metals are found[cite: 6, 7]." },
+    { q: "Why is copper sulfate not listed anywhere on the Periodic Table?", a: ["It is a liquid metal", "It is a compound, not an element", "It has an atomic number higher than 118", "It is a pure non-metal gas"], c: 1, exp: "Copper sulfate is a compound made of multiple elements, and the periodic table only lists elements[cite: 6, 7]." },
+    { q: "What general word equation describes a metal reacting with oxygen?", a: ["Metal + Oxygen -> Salt + Hydrogen", "Metal + Oxygen -> Metal Oxide", "Metal + Oxygen -> Metal Hydroxide", "Metal + Oxygen -> No reaction"], c: 1, exp: "When a metal reacts with oxygen, the product is a metal oxide[cite: 5]." },
+    { q: "What is a chemical reaction with oxygen alternative named?", a: ["Reduction reaction", "Oxidation reaction", "Electrolysis", "Displacement"], c: 1, exp: "A reaction where a substance combines with oxygen is an oxidation reaction[cite: 5]." },
+    { q: "What are the two products formed when a metal reacts with an acid?", a: ["Metal oxide and water", "Salt and hydrogen gas", "Metal hydroxide and hydrogen", "Carbon dioxide and salt"], c: 1, exp: "Metal + Acid -> Salt + Hydrogen gas[cite: 5]." },
+    { q: "If a metal reacts specifically with hydrochloric acid, what type of salt is made?", a: ["Metal sulfate", "Metal nitrate", "Metal chloride", "Metal carbonate"], c: 2, exp: "Hydrochloric acid produces metal chloride salts[cite: 5]." },
+    { q: "What type of salt is generated when a metal reacts with sulfuric acid?", a: ["Metal chloride", "Metal sulfate", "Metal nitrate", "Metal oxide"], c: 1, exp: "Sulfuric acid produces metal sulfate salts[cite: 5]." },
+
+    // 21-30: Acid Reactions & Water/Steam Trends
+    { q: "What salt is formed when magnesium reacts with nitric acid?", a: ["Magnesium chloride", "Magnesium sulfate", "Magnesium nitrate", "Magnesium hydroxide"], c: 2, exp: "Nitric acid always generates metal nitrate salts[cite: 5]." },
+    { q: "What gas is produced when potassium, sodium, or calcium react with cold water?", a: ["Oxygen", "Carbon dioxide", "Hydrogen", "Nitrogen"], c: 2, exp: "The reaction of these metals with water releases flammable hydrogen gas[cite: 5]." },
+    { q: "What alkaline compound is created alongside hydrogen when a Group 1 metal reacts with water?", a: ["Metal chloride", "Metal oxide", "Metal hydroxide", "Metal sulfate"], c: 2, exp: "Metal + Water -> Metal hydroxide + Hydrogen[cite: 5]." },
+    { q: "How does the reactivity of alkali metals alter as you move down Group 1?", a: ["It decreases", "It increases", "It stays exactly the same", "They become non-metals"], c: 1, exp: "The speed and violence increases as you go down, meaning reactivity increases down Group 1[cite: 5]." },
+    { q: "Which metals from the options react with cold water to produce hydrogen?", a: ["Magnesium and Zinc", "Potassium and Sodium", "Iron and Copper", "Silver and Gold"], c: 1, exp: "Potassium and sodium react vigorously with cold water, whereas magnesium requires steam[cite: 5]." },
+    { q: "What occurs when magnesium, aluminium, zinc, or iron are mixed with steam?", a: ["They melt into liquids", "They produce hydrogen gas and an oxide", "No reaction takes place", "They turn into gold"], c: 1, exp: "These middle-tier metals do not react with cold water but react with steam to give hydrogen[cite: 5]." },
+    { q: "Which metal exhibits absolutely no reaction when exposed to cold water or steam?", a: ["Calcium", "Magnesium", "Iron", "Copper"], c: 3, exp: "Copper, silver, and gold have no reaction with water or steam[cite: 5]." },
+    { q: "What happens to the rate of reaction with acid as you go down the reactivity series table?", a: ["It increases", "It decreases", "It remains completely violent", "It fluctuates unpredictably"], c: 1, exp: "The rate of reaction with acid decreases down the series table[cite: 5]." },
+    { q: "Which of these metals has a very slow reaction with acid?", a: ["Potassium", "Calcium", "Iron", "Gold"], c: 2, exp: "Iron has a very slow reaction with acid, while potassium and calcium react violently[cite: 5]." },
+    { q: "Which metal does not react at all with oxygen, water, or acids?", a: ["Sodium", "Magnesium", "Zinc", "Gold"], c: 3, exp: "Gold is highly unreactive and shows no change or reaction across these tests[cite: 5]." },
+
+    // 31-40: Displacement Mechanics & Observations
+    { q: "What is the definition of a displacement reaction?", a: ["A reaction where mass is destroyed", "A reaction where a more reactive metal displaces a less reactive metal from a compound", "A physical change from solid to liquid", "A reaction that forms carbon monoxide only"], c: 1, exp: "Displacement occurs when a highly reactive metal takes the place of a less reactive metal in a compound[cite: 5]." },
+    { q: "If magnesium is added to copper sulfate solution, what happens?", a: ["No reaction occurs because copper is more reactive", "Magnesium displaces the copper to form magnesium sulfate and copper", "The solution stays blue and forms a red gas", "Magnesium turns into iron filings"], c: 1, exp: "Since magnesium is more reactive than copper, it displaces copper from copper sulfate[cite: 5]." },
+    { q: "When an iron nail is placed into a blue copper sulfate solution, what color change is observed in the solution after one week?", a: ["It changes from blue to green", "It turns completely orange", "It remains bright blue", "It turns purple"], c: 0, exp: "The solution turns green because iron sulfate is formed in place of copper sulfate[cite: 5, 7]." },
+    { q: "What color change is observed on the surface of an iron nail during its displacement reaction with copper sulfate?", a: ["It turns white", "It becomes brown, pink, or copper colored", "It turns bright green", "No visible change occurs"], c: 1, exp: "The nail becomes coated with brown/pink/copper-colored displaced copper metal[cite: 6, 7]." },
+    { q: "What product is generated alongside copper metal when iron is mixed with copper sulfate?", a: ["Copper chloride", "Iron sulfate", "Calcium nitrate", "Iron oxide"], c: 1, exp: "Iron + Copper Sulfate -> Iron Sulfate + Copper[cite: 6, 7]." },
+    { q: "If you add copper pieces to a green iron sulfate solution, will a displacement reaction occur?", a: ["Yes, because copper is more reactive", "No, because iron is more reactive than copper", "Yes, and a bright gas will evolve", "No, because copper only reacts with water"], c: 1, exp: "No reaction occurs because copper is lower on the reactivity series and cannot displace iron[cite: 6, 7]." },
+    { q: "Which two metals would successfully react with aluminium nitrate in a displacement test?", a: ["Zinc and Lead", "Calcium and Potassium", "Copper and Iron", "Gold and Silver"], c: 1, exp: "Only metals higher than aluminium (like potassium and calcium) can displace it[cite: 6, 7]." },
+    { q: "If copper metal is placed into calcium nitrate solution on a spotting tile, what is observed?", a: ["Vigorous bubbling", "No reaction (X)", "A green precipitate", "An explosion"], c: 1, exp: "Copper is far less reactive than calcium, so no reaction (X) occurs[cite: 6, 7]." },
+    { q: "If magnesium metal is added to copper nitrate solution, what is the result?", a: ["No reaction occurs (X)", "A reaction takes place (✓)", "Copper turns into calcium", "The spotting tile dissolves"], c: 1, exp: "Magnesium is more reactive than copper, so a displacement reaction takes place (✓)[cite: 6, 7]." },
+    { q: "What visual indicator reveals that a metal reacts when added to hydrochloric acid in a test tube?", a: ["The liquid freezes", "Bubbles / fizzing / gas is given off", "The metal turns into a blue compound immediately", "The volume of acid increases"], c: 1, exp: "Bubbles, fizzing, or effervescence indicate that hydrogen gas is being evolved[cite: 6, 7]." },
+
+    // 41-50: Extraction Chemistry & Blast Furnace
+    { q: "How must highly reactive metals like potassium, sodium, lithium, and calcium be extracted from their ores?", a: ["By heating the ore with carbon", "By electrolysis of molten compounds", "By washing them with cold water", "They are found as pure elements in nature"], c: 1, exp: "The most reactive metals require electrolysis of molten compounds to separate them from their ores[cite: 5]." },
+    { q: "Which metal can be extracted from its compound by heating the ore with carbon?", a: ["Potassium", "Sodium", "Zinc", "Lithium"], c: 2, exp: "Metals below carbon (like zinc, iron, lead, and copper) can be extracted by reduction with carbon[cite: 5, 7]." },
+    { q: "Why can copper be extracted by heating its ore with hydrogen?", a: ["Because copper is more reactive than hydrogen", "Because hydrogen is more reactive than copper", "Because copper is a non-metal", "Because hydrogen acts as an electrical current"], c: 1, exp: "Hydrogen can displace copper because hydrogen is higher on the reactivity series[cite: 6, 7]." },
+    { q: "What gas reacts with carbon in a blast furnace to initially make carbon dioxide?", a: ["Hydrogen", "Nitrogen", "Oxygen", "Steam"], c: 2, exp: "Carbon reacts with oxygen to form carbon dioxide (C + O2 -> CO2)[cite: 6]." },
+    { q: "How is the reducing agent carbon monoxide (CO) made in a blast furnace?", a: ["By mixing iron ore with hydrogen", "Carbon dioxide reacts with more carbon to make carbon monoxide", "By burning copper sulfate", "By cooling sodium down to 98°C"], c: 1, exp: "CO2 + C -> 2CO is the reaction that generates carbon monoxide gas[cite: 6]." },
+    { q: "What is the correct chemical formula for iron ore (iron oxide) used in the blast furnace equation?", a: ["FeSO4", "Fe2O3", "CuO", "FeCl2"], c: 1, exp: "Iron ore is represented by the formula Fe2O3[cite: 6, 7]." },
+    { q: "In the balanced blast furnace equation: Fe2O3 + 3CO -> 2Fe + 3CO2, what happens to the iron oxide?", a: ["It is oxidised because it gains oxygen", "It is reduced because it loses oxygen", "It undergoes electrolysis", "It dissolves into an acid"], c: 1, exp: "Iron oxide loses its oxygen atoms to carbon monoxide, meaning it is reduced[cite: 6]." },
+    { q: "In the blast furnace, what happens to the carbon monoxide (CO)?", a: ["It is reduced", "It is oxidised because it takes oxygen", "It turns into a liquid metal", "It turns into a chloride salt"], c: 1, exp: "Carbon monoxide gains oxygen to become carbon dioxide, meaning it is oxidised[cite: 6]." },
+    { q: "Which metal is found completely uncombined as a pure element in nature?", a: ["Calcium", "Magnesium", "Iron", "Gold"], c: 3, exp: "Gold is at the bottom of the series and is found as a pure element due to its low reactivity[cite: 5, 7]." },
+    { q: "What specific domestic/industrial use is copper chosen for based on its properties?", a: ["Blast furnace frames", "Electrical wires", "Rust protective coatings", "Acid containment units"], c: 1, exp: "Copper is an excellent electrical conductor and is used for electrical wiring[cite: 6, 7]." },
+
+    // 51-60: Lab Practicals & Matching Logic
+    { q: "Which transition metal turns rusty when exposed to environmental elements?", a: ["Copper", "Iron", "Zinc", "Magnesium"], c: 1, exp: "Iron is the specific metal that undergoes rust degradation[cite: 6, 7]." },
+    { q: "If calcium carbonate is reacted with hydrochloric acid, what products are formed?", a: ["No reaction occurs", "A chloride and hydrogen gas are formed", "A chloride, carbon dioxide, and water are formed", "Calcium oxide only"], c: 2, exp: "Carbonates react with acid to produce a salt (chloride), carbon dioxide gas, and water[cite: 6, 7]." },
+    { q: "What is observed when copper metal is added to a test tube of hydrochloric acid?", a: ["Violent bubbling and explosion", "Slow forming of a red powder", "No reaction occurs", "The metal floats and turns green"], c: 2, exp: "Copper is below hydrogen in the reactivity series and does not react with hydrochloric acid[cite: 5, 6, 7]." },
+    { q: "Which of these metals has the highest atomic (proton) number based on the snippets?", a: ["Hydrogen", "Sodium", "Calcium", "Iron"], c: 3, exp: "Iron is further along the periodic table with a higher proton number than the others listed[cite: 5]." },
+    { q: "What subatomic particles are located together inside the central nucleus of an atom?", a: ["Electrons and protons", "Protons and neutrons", "Electrons and neutrons", "Electrons only"], c: 1, exp: "The central nucleus contains the heavy protons and neutrons[cite: 5]." },
+    { q: "What surrounds the nucleus in distinct orbital pathways?", a: ["Protons", "Neutrons", "Electrons", "Salts"], c: 2, exp: "Electrons orbit around the central nucleus[cite: 5]." },
+    { q: "If a metal glows and its oxide forms slowly when heated, which pair matches this description?", a: ["Potassium and Sodium", "Magnesium and Iron", "Copper and Gold", "Calcium and Lead"], c: 1, exp: "Magnesium burns brightly, while iron filings glow and form oxide slowly[cite: 5, 7]." },
+    { q: "What type of metal is produced when iron filings replace copper in a solution?", a: ["A green gas", "An orange metal (copper)", "A blue crystal", "A liquid mercury film"], c: 1, exp: "Displaced copper deposits appear as an orange metal solid[cite: 7]." },
+    { q: "What is the relative mass of an electron?", a: ["1", "+1", "0", "-1"], c: 2, exp: "An electron has a relative mass of 0 (or negligible mass) compared to protons and neutrons[cite: 5]." },
+    { q: "In the reaction: Magnesium + Hydrochloric acid -> Magnesium chloride + Hydrogen, what type of salt is generated?", a: ["Sulfate", "Chloride", "Nitrate", "Oxide"], c: 1, exp: "Hydrochloric acid always forms chloride salts[cite: 5]." }
+];
+
+const reasoningQuestions = [
+    { q: "Why can carbon be used to extract iron from iron oxide, but cannot be used to extract aluminium from aluminium oxide?", exp: "According to the reactivity series, a element can only reduce or displace a metal if it is more reactive than that metal[cite: 5]. Carbon is located higher than zinc, iron, and lead, allowing it to reduce iron oxide in a blast furnace[cite: 5, 6]. However, aluminium is higher than carbon on the reactivity series, meaning carbon is not reactive enough to take the oxygen away from aluminium oxide[cite: 5]. Therefore, aluminium must be extracted using electrolysis[cite: 5]." },
+    { q: "Why does the reaction between an iron nail and copper sulfate solution cause both a visible color change in the liquid and a texturized change on the nail?", exp: "This occurs due to a displacement reaction where more reactive iron replaces the less reactive copper ions in solution[cite: 5, 7]. As iron atoms leave the nail to enter the solution, they form iron sulfate, changing the liquid's color from blue to green[cite: 7]. Meanwhile, the copper ions out of solution are reduced into metallic copper, depositing onto the surface of the iron nail as an orange/brown solid coating[cite: 6, 7]." },
+    { q: "Why do potassium and sodium show a much more violent reaction with cold water than magnesium?", exp: "Reactivity increases down Group 1, making alkali metals highly unstable and ready to react with water to release hydrogen and build hydroxides[cite: 5]. Potassium and sodium are highly reactive and split water molecules violently at room temperature[cite: 5]. Magnesium is lower on the overall reactivity layout and forms a defensive layer, meaning it has no noticeable reaction with cold water and requires high-energy steam to react[cite: 5]." }
+];
+
+const theoryQuestions = [
+    { q: "Detail the construction of an atom by describing the mass, charge, and location of its three subatomic components.", exp: "Based on the atomic structure charts: 1) Protons have a relative mass of 1, a charge of +1, and reside inside the central nucleus[cite: 5]. 2) Neutrons have a relative mass of 1, a neutral charge of 0, and are also packed inside the nucleus[cite: 5]. 3) Electrons have a relative mass of 0, a negative charge of -1, and orbit outside the nucleus in surrounding shells[cite: 5]." },
+    { q: "Explain how the type of acid chosen alters the chemical name of the salt product, providing examples for hydrochloric, sulfuric, and nitric acids.", exp: "When metals react with acids, the hydrogen is displaced, and the remaining non-metal ions form a salt[cite: 5]. The suffix of the salt is strictly governed by the acid: Hydrochloric acid forms a metal chloride salt; Sulfuric acid produces a metal sulfate salt; and Nitric acid generates a metal nitrate salt[cite: 5]." },
+    { q: "Describe the two step sequence of chemical reactions that produces carbon monoxide gas inside an industrial blast furnace.", exp: "First, coke (carbon) reacts with injected oxygen gas to generate carbon dioxide gas through an oxidation step: C + O2 -> CO2[cite: 6]. Second, this carbon dioxide gas rises and reacts with additional hot carbon layers to be reduced into carbon monoxide gas: CO2 + C -> 2CO, which then serves as the main reducing agent for the iron ore extraction[cite: 6]." },
+    { q: "Provide the fully balanced symbol equation for the extraction of iron in a blast furnace and identify which species is oxidized and which is reduced.", exp: "The balanced equation is: Fe2O3 + 3CO -> 2Fe + 3CO2[cite: 6]. In this process, the iron ore (Fe2O3) is reduced because it loses its oxygen atoms to form pure liquid iron[cite: 6]. The carbon monoxide (CO) is oxidized because it gains oxygen atoms to transform into carbon dioxide gas[cite: 6]." },
+    { q: "Summarize the experimental observations when calcium carbonate, magnesium, and copper are independently tested with hydrochloric acid.", exp: "According to laboratory mappings: 1) Calcium carbonate forms a chloride salt, carbon dioxide gas (causing fizzing), and water[cite: 6, 7]. 2) Magnesium reacts quickly to generate a chloride salt and hydrogen gas bubbles[cite: 6, 7]. 3) Copper is below hydrogen in reactivity, producing no reaction, no bubbling, and no structural state changes[cite: 5, 6, 7]." }
+];
+
+// Populate Elements
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your chemical analysis here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Verified Scheme Criteria Key:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+
+// Grade function
+function gradeQuiz() {
+    let score = 0;
+    
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        expBox.style.display = 'block';
+
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Explanatory Note:</strong> ${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<reasoningQuestions.length; i++) {
+        document.getElementById(`reason-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<theoryQuestions.length; i++) {
+        document.getElementById(`theory-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
