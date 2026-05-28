@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 8 Chemistry Revision Quiz</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-dark: #354f74;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --gray: #8d99ae;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f2f5;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .intro {
+            background-color: #eef1f6;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+        .quiz-progress {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-bar-container {
+            width: 70%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        .question-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .question-card.answered {
+            border-left: 5px solid var(--success);
+            background-color: #fafdfb;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--light);
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #edf2f7;
+            border-color: var(--gray);
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 30px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #edf7f6;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin: 10px 0;
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .feedback {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 8 Chemistry Module Quiz</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Answer all 60 questions based on your chemistry learning notes. Scroll down and click on your answers. When you reach the bottom, click <strong>"Submit Answers"</strong> to see your final score and check any mistakes!</p>
+    </div>
+
+    <div class="quiz-progress">
+        <span>Progress: <span id="progress-text">0/60</span> Answered</span>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <div id="results-box">
+        <h2>Your Results Are In!</h2>
+        <div class="score-display" id="final-score">0 / 60</div>
+        <p id="grade-message"></p>
+        <p>Review your answers below. Correct choices are highlighted in green, and wrong selections are highlighted in red.</p>
+    </div>
+
+    <form id="quiz-form">
+        <div id="questions-container"></div>
+        <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+    </form>
+</div>
+
+<script>
+const quizData = [
+    // Section 1: Periodic Table & Basic Definitions
+    { q: "What is the definition of the Periodic Table?", a: ["A table listing compounds", "A table of all known elements in order of their atomic number", "A chart showing physical mixtures", "A diagram showing chemical states"], c: 1 },
+    { q: "What do we call the vertical columns on the Periodic Table?", a: ["Periods", "Rows", "Groups", "Elements"], c: 2 },
+    { q: "What do we call the horizontal rows on the Periodic Table?", a: ["Groups", "Periods", "Mixtures", "Columns"], c: 1 },
+    { q: "What is the smallest piece of an element that can exist?", a: ["A compound", "A mixture", "An atom", "A molecule"], c: 2 },
+    { q: "Which statement best describes an element?", a: ["A substance containing only one type of atom", "Two or more elements chemically joined", "A blend of different liquids", "A substance that easily changes state"], c: 0 },
+    { q: "What is a compound?", a: ["A pure substance with one type of atom", "Two or more different elements chemically joined together", "A random collection of atoms not bonded together", "A temporary physical mixture"], c: 1 },
+    { q: "What is a mixture?", a: ["A single type of atom in solid state", "Two or more elements or compounds not chemically joined together", "Elements that are permanently fixed via chemical bonds", "A toxic gas that cannot be separated"], c: 1 },
+    { q: "Which symbol represents the element Hydrogen on the Periodic Table?", a: ["He", "Hy", "H", "Li"], c: 2 },
+    { q: "What element is represented by the symbol 'He'?", a: ["Hydrogen", "Helium", "Lithium", "Beryllium"], c: 1 },
+    { q: "Where can you find the element Sodium (Na) on the Periodic Table?", a: ["Group 1, Period 3", "Group 2, Period 1", "Group 7, Period 4", "Group 0, Period 2"], c: 0 },
+    { q: "What element does the symbol 'Mg' represent?", a: ["Manganese", "Mercury", "Magnesium", "Copper"], c: 2 },
+    { q: "Which of the following is classified as a non-metal?", a: ["Iron (Fe)", "Calcium (Ca)", "Oxygen (O)", "Copper (Cu)"], c: 2 },
+
+    // Section 2: Chemical & Physical Reactions
+    { q: "What happens during a chemical reaction?", a: ["Substances change shape but keep the same bonds", "Atoms are rearranged to form new substances", "Mass is completely destroyed", "A solid only changes into a liquid"], c: 1 },
+    { q: "Chemical reactions are generally considered to be what?", a: ["Reversible", "Irreversible", "Temporary physical changes", "Always endothermic"], c: 1 },
+    { q: "Which of the following describes a physical reaction?", a: ["New substances are permanently made", "Physical properties change, but no new substances are made", "Atoms are completely rearranged", "Mass changes during the change"], c: 1 },
+    { q: "Physical reactions are also known as what?", a: ["Irreversible reactions", "Reversible reactions", "Combustion paths", "Decompositions"], c: 1 },
+    { q: "What is a 'reactant' in a chemical equation?", a: ["The substance formed at the end", "The arrow pointing to the product", "A substance that reacts together with another substance at the start", "An atom that gets destroyed"], c: 2 },
+    { q: "What is a 'product' in a chemical reaction?", a: ["The starting chemical material", "A substance formed during the reaction", "The heat taken in during a change", "The speed at which a reaction occurs"], c: 1 },
+    { q: "In a written chemical equation, where are the reactants always positioned?", a: ["To the right of the arrow", "Underneath the arrow", "To the left of the arrow", "After the equals sign"], c: 2 },
+    { q: "What does the arrow in a chemical equation mean?", a: ["The reaction is reversible", "A chemical reaction has taken place", "The mass has doubled", "The chemicals are physical mixtures"], c: 1 },
+    { q: "If Iron and Oxygen react to form Iron Oxide, what is the product?", a: ["Iron", "Oxygen", "Iron Oxide", "Rust gas"], c: 2 },
+    { q: "If Copper and Oxygen react, what are the reactants?", a: ["Copper Oxide only", "Copper and Oxygen", "Sulfate and Heat", "Pure Copper only"], c: 1 },
+    { q: "What process occurs when iron reacts with oxygen to form rust?", a: ["A physical change", "A chemical change", "An endothermic decomposition", "Incomplete combustion"], c: 1 },
+    { q: "Ice melting into liquid water is an example of what?", a: ["A chemical change", "A physical change", "An irreversible reaction", "Oxidation"], c: 1 },
+
+    // Section 3: Naming Compounds
+    { q: "When naming a compound made of a metal and a non-metal, which goes first?", a: ["The non-metal", "The element with more mass", "The metal", "The gas"], c: 2 },
+    { q: "What does the ending of a non-metal change to if the compound contains only two elements?", a: ["-ate", "-ide", "-ic", "-ox"], c: 1 },
+    { q: "Name the compound: Copper + Oxygen.", a: ["Copper Oxygenate", "Copper Oxide", "Copper Dioxide", "Oxide Copper"], c: 1 },
+    { q: "Name the compound: Lithium + Fluorine.", a: ["Lithium Fluorate", "Lithium Fluoride", "Fluorine Lithide", "Lithium Fluorine"], c: 1 },
+    { q: "If a compound contains a metal, a non-metal, and Oxygen, what does the non-metal ending change to?", a: ["-ide", "-ate", "-igen", "-ic"], c: 1 },
+    { q: "Name the compound made from: Copper, Sulfur, and Oxygen.", a: ["Copper Sulfide", "Copper Sulfur Oxide", "Copper Sulfate", "Sulfur Copperate"], c: 2 },
+    { q: "What elements are found in Magnesium Carbonate?", a: ["Magnesium and Carbon only", "Magnesium, Carbon, and Oxygen", "Magnesium and Carbohydrates", "Manganese, Carbon, and Hydrogen"], c: 1 },
+    { q: "What elements are found in Sodium Chloride?", a: ["Sodium and Chlorine", "Sodium, Chlorine, and Oxygen", "Sodium and Carbonate", "Chlorine and Carbonate"], c: 0 },
+    { q: "What is the name of the compound formed when Calcium reacts with Nitrogen and Oxygen?", a: ["Calcium Nitride", "Calcium Nitrate", "Calcium Nitrogen Oxide", "Nitrogen Calciate"], c: 1 },
+    { q: "What is the name of the compound formed when Zinc reacts with Bromine only?", a: ["Zinc Bromate", "Zinc Bromide", "Zinc Bromine", "Bromine Zincide"], c: 1 },
+    { q: "If a compound ends in '-ate', it tells you that which hidden element is present?", a: ["Hydrogen", "Carbon", "Oxygen", "Sulfur"], c: 2 },
+    { q: "How many elements are present in Sodium Sulfate?", a: ["One", "Two", "Three or more", "None"], c: 2 },
+
+    // Section 4: Conservation of Mass & Balancing Equations
+    { q: "What does the 'Law of Conservation of Mass' state?", a: ["Mass is gained when compounds burn", "Atoms can be created but not destroyed", "The total mass of products equals the total mass of reactants", "Mass decreases in an endothermic reaction"], c: 2 },
+    { q: "What happens to individual atoms during a chemical reaction?", a: ["Some atoms are destroyed to release heat", "They join together in a different way than before", "New atoms are created out of energy", "They change into different elements"], c: 1 },
+    { q: "If 254g of Copper reacts completely with Oxygen to make 318g of Copper Oxide, what mass of Oxygen reacted?", a: ["572g", "64g", "318g", "100g"], c: 1 },
+    { q: "Why is the equation 'Cu + O2 -> CuO' considered unbalanced?", a: ["There are more copper atoms on the right", "There are two oxygen atoms on the left, but only one on the right", "It shows a physical mixture instead of a compound", "It is missing a reaction arrow"], c: 1 },
+    { q: "What are you allowed to change when balancing a chemical equation?", a: ["The small numbers within the formulas", "The chemical symbols of elements", "The number of units in front of the substances", "The layout of the periodic table"], c: 2 },
+    { q: "Which of the following is the correctly balanced equation for the formation of copper oxide?", a: ["Cu + O2 -> CuO", "2Cu + O2 -> 2CuO", "Cu + 2O2 -> CuO2", "2Cu + 2O2 -> 2CuO"], c: 1 },
+    { q: "If 10g of reactant A mixes with 15g of reactant B in a closed flask to form product C, what will the mass of product C be?", a: ["5g", "10g", "25g", "15g"], c: 2 },
+    { q: "Why can you NOT change the small numbers (subscripts) in a chemical formula when balancing?", a: ["It is too difficult to write", "Changing the small number changes what the substance is", "The law of conservation says small numbers are fixed constants", "Small numbers only apply to metals"], c: 1 },
+    { q: "In a balanced chemical equation, what must be equal on both sides?", a: ["The total number of molecules", "The number of atoms of each element", "The state of matter", "The number of chemical letters"], c: 1 },
+    { q: "If an equation has 4 hydrogen atoms on the reactant side, how many must it have on the product side?", a: ["2", "4", "8", "1"], c: 1 },
+    { q: "True or False: Conservation of mass applies to both open and closed reactions.", a: ["True, but in open systems gases can escape, making mass look altered", "False, it only works for solids", "True, mass always increases when gases float", "False, atoms are created in open air"], c: 0 },
+    { q: "What feature models a pure compound in diagram representations?", a: ["Single isolated atoms of one colour", "Two different types of atoms chemically bonded together", "Unbonded mixed circles floating around", "A solution of changing shapes"], c: 1 },
+
+    // Section 5: Energetics (Endothermic & Exothermic)
+    { q: "What is an endothermic reaction?", a: ["A reaction that gives out heat", "A reaction that takes in heat", "A reaction that changes color", "A reaction that produces light"], c: 1 },
+    { q: "What temperature change occurs in the surroundings during an endothermic reaction?", a: ["Temperature increases", "Temperature stays exactly the same", "Temperature decreases", "Temperature fluctuates wildly"], c: 2 },
+    { q: "Which of these processes is an example of an endothermic reaction?", a: ["Combustion", "Thermal decomposition", "Neutralisation", "Oxidation"], c: 1 },
+    { q: "What is an exothermic reaction?", a: ["A reaction that takes in thermal energy", "A reaction that releases thermal energy", "A reaction that only happens to non-metals", "A process that creates new atoms"], c: 1 },
+    { q: "What temperature change occurs in the surroundings during an exothermic reaction?", a: ["Temperature increases", "Temperature decreases", "Temperature becomes freezing", "No change occurs"], c: 0 },
+    { q: "Which of the following is an example of an exothermic reaction?", a: ["Thermal decomposition", "Ice melting into liquid water", "Combustion", "Photosynthesis"], c: 2 },
+
+    // Section 6: Combustion
+    { q: "What is another name for combustion?", a: ["Freezing", "Burning", "Melting", "Decomposing"], c: 1 },
+    { q: "Combustion is a type of which energetic reaction?", a: ["Endothermic", "Exothermic", "Physical state change", "Reversible reaction"], c: 1 },
+    { q: "What are hydrocarbons?", a: ["Compounds consisting of hydrogen and oxygen atoms only", "Compounds consisting of hydrogen and carbon atoms only", "Mixtures of carbon dioxide and water", "Pure elements found in Group 7"], c: 1 },
+    { q: "What gas must a fuel react with for complete combustion to take place?", a: ["Carbon Dioxide", "Nitrogen", "Oxygen", "Hydrogen"], c: 2 },
+    { q: "What are the products of the complete combustion of a hydrocarbon fuel?", a: ["Carbon Monoxide and Water", "Carbon Dioxide and Water", "Soot and Carbon", "Hydrogen and Oxygen"], c: 1 },
+    { q: "When does incomplete combustion happen instead of complete combustion?", a: ["When there is too much fuel", "When there is not enough oxygen in the air", "When the temperature is too low", "When the fuel is a metal"], c: 1 },
+    { q: "What dangerous, toxic gas can be produced during incomplete combustion?", a: ["Carbon Dioxide", "Carbon Monoxide", "Oxygen", "Sulfur Dioxide"], c: 1 },
+    { q: "What solid waste product is produced during incomplete combustion that appears as soot or smoke?", a: ["Pure Hydrogen", "Carbon particles", "Water vapour", "Copper Oxide"], c: 1 },
+    { q: "Complete the word equation: Fuel + Oxygen -> Carbon Monoxide + _________.", a: ["Carbon Dioxide", "Hydrogen", "Water", "Soot"], c: 2 },
+    { q: "What health risk is directly caused by the soot produced during incomplete combustion?", a: ["Skin color changes", "Breathing problems", "Loss of hearing", "High density bones"], c: 1 }
+];
+
+// Generate Questions Dynamically
+const container = document.getElementById('questions-container');
+
+quizData.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-card-${index}`;
+
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="label-${index}-${oIdx}">
+                    <input type="radio" name="question-${index}" value="${oIdx}" onclick="updateProgress(${index})">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="feedback" id="feedback-${index}"></div>
+    `;
+    container.appendChild(card);
+});
+
+// Update the Top Progress bar
+function updateProgress(index) {
+    document.getElementById(`q-card-${index}`).classList.add('answered');
+    
+    const totalQuestions = quizData.length;
+    let answeredCount = 0;
+    
+    for(let i=0; i<totalQuestions; i++) {
+        const checked = document.querySelector(`input[name="question-${i}"]:checked`);
+        if(checked) answeredCount++;
+    }
+    
+    const percentage = (answeredCount / totalQuestions) * 100;
+    document.getElementById('progress-bar').style.width = percentage + '%';
+    document.getElementById('progress-text').innerText = `${answeredCount}/${totalQuestions}`;
+}
+
+// Grade entire quiz on click
+function gradeQuiz() {
+    let score = 0;
+    const totalQuestions = quizData.length;
+
+    quizData.forEach((data, index) => {
+        const selectedRadio = document.querySelector(`input[name="question-${index}"]:checked`);
+        const feedbackDiv = document.getElementById(`feedback-${index}`);
+        
+        // Reset option styles before checking
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        if (selectedRadio) {
+            const selectedAnswer = parseInt(selectedRadio.value);
+            
+            if (selectedAnswer === data.c) {
+                score++;
+                document.getElementById(`label-${index}-${selectedAnswer}`).classList.add('correct-answer');
+                feedbackDiv.innerHTML = "✓ Correct!";
+                feedbackDiv.style.color = "var(--success)";
+            } else {
+                document.getElementById(`label-${index}-${selectedAnswer}`).classList.add('wrong-answer');
+                document.getElementById(`label-${index}-${data.c}`).classList.add('correct-answer');
+                feedbackDiv.innerHTML = `✗ Incorrect. Correct answer: ${data.a[data.c]}`;
+                feedbackDiv.style.color = "var(--danger)";
+            }
+        } else {
+            // Unanswered questions highlighted with correct choice
+            document.getElementById(`label-${index}-${data.c}`).classList.add('correct-answer');
+            feedbackDiv.innerHTML = `⚠️ Unanswered. Correct answer was: ${data.a[data.c]}`;
+            feedbackDiv.style.color = "var(--gray)";
+        }
+    });
+
+    // Display Score Result Header Card
+    const resultsBox = document.getElementById('results-box');
+    resultsBox.style.display = 'block';
+    
+    const finalScoreContainer = document.getElementById('final-score');
+    finalScoreContainer.innerText = `${score} / ${totalQuestions}`;
+    
+    const messageContainer = document.getElementById('grade-message');
+    const scorePercentage = (score / totalQuestions) * 100;
+    
+    if(scorePercentage >= 85) {
+        messageContainer.innerText = "Fantastic! You achieved a UK Grade 9 equivalent level in this Module! Outstanding science knowledge.";
+    } else if(scorePercentage >= 65) {
+        messageContainer.innerText = "Great job! A very solid pass. You clearly understand your atoms and chemical equations well.";
+    } else if(scorePercentage >= 40) {
+        messageContainer.innerText = "Good effort! Go back over the marked corrections below to help boost your chemistry score next time.";
+    } else {
+        messageContainer.innerText = "Keep studying! Review your notes on combustion or the conservation of mass and try the quiz again.";
+    }
+
+    // Smooth scroll up to see final grade summary
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
