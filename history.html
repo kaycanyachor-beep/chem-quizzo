@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 History Assessment Quiz</title>
+    <style>
+        :root {
+            --primary: #8b5a2b;
+            --primary-dark: #5c3a1a;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #fdfbf7;
+            --dark: #3e2723;
+            --gray: #7f8c8d;
+            --theory-bg: #f4eae1;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #f7f1e3;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #d1ccc0;
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px double var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.3rem;
+        }
+        .intro {
+            background-color: #f1f2f6;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #f5f6fa;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #f1f9f6;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        .feedback {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 History Assessment</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Complete all sections of the history test. For the multiple-choice questions, select the best option. For the Reasoning, Theory, and Application sections, type your historical explanation into the boxes provided. Click <strong>"Submit Test"</strong> at the bottom to receive your automatic multiple-choice score and display the expert explanations to review your written answers.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Assessment Complete!</h2>
+        <div class="score-display" id="final-score">0 / 20</div>
+        <p><strong>Note on Written Questions:</strong> Your multiple-choice questions have been scored above. Scroll down to read the model answers for the written sections to grade your analysis!</p>
+    </div>
+
+    <form id="history-form">
+        <!-- PART 1: MULTIPLE CHOICE -->
+        <div class="section-heading">Part 1: Knowledge Multiple Choice</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <!-- PART 2: REASONING QUESTIONS -->
+        <div class="section-heading">Part 2: Reasoning Questions</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <!-- PART 3: THEORY QUESTIONS -->
+        <div class="section-heading">Part 3: Theory Questions</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <!-- PART 4: APPLICATION QUESTIONS -->
+        <div class="section-heading">Part 4: Application Questions</div>
+        <div id="application-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeAssessment()">Submit Test & Reveal Explanations</button>
+    </form>
+</div>
+
+<script>
+// Strictly your provided questions
+const mcQuestions = [
+    { q: "What was a major reason for Emperor Claudius to invade Britain in AD 43?", a: ["To find a new route to India", "To prove his strength so the Roman army would support him", "To spread Christianity", "To escape from a rebellion in Rome"], c: 1 },
+    { q: "What precious metals did the Romans want from Britain?", a: ["Silver, copper, and bronze", "Tin, iron, and gold", "Lead, zinc, and coal", "Steel and nickel"], c: 1 },
+    { q: "Why did the Romans call Britain 'Britannia'?", a: ["It means 'Land of Tin'", "It is named after a Roman goddess", "It means 'Land of the brave'", "It is the Latin word for island"], c: 0 },
+    { q: "Which Roman general invaded Britain in 55 BC and 54 BC?", a: ["Emperor Claudius", "Julius Caesar", "Septimius Severus", "Augustus"], c: 1 },
+    { q: "Why did the Romans invade to defend the Empire?", a: ["To stop British Celts from supporting French rebels", "To capture more slaves", "To stop Viking raids", "To expand their navy"], c: 0 },
+    { q: "Which of these is a change the Romans brought to Britain?", a: ["Use of the Latin language and alphabet", "Widespread use of wooden roundhouses", "The Celtic tribal system", "Building dirt tracks only"], c: 0 },
+    { q: "What did Romans use to transport fresh water into towns?", a: ["Stone pipes", "Aqueducts", "Wooden canals", "Wells only"], c: 1 },
+    { q: "What was the primary purpose of Roman 'insulae'?", a: ["Mansions for the rich", "Temples for gods", "Flats for poorer people", "Storage for grain"], c: 2 },
+    { q: "Which Roman god is the god of war?", a: ["Jupiter", "Mars", "Mercury", "Vulcan"], c: 1 },
+    { q: "What is 'continuity' in history?", a: ["Something that changes rapidly", "Something that remains the same", "A new invention", "A type of Roman building"], c: 1 },
+    { q: "Who were Hengist and Horsa?", a: ["Roman generals", "Brothers who created the Kingdom of Kent", "Viking invaders", "Kings of Northumbria"], c: 1 },
+    { q: "What does the title 'Bretwalda' mean in Anglo-Saxon England?", a: ["The wealthiest merchant", "The ruler of the most powerful kingdom", "A religious leader", "A foreign diplomat"], c: 1 },
+    { q: "Which kingdom became the most powerful from AD 685 to AD 826?", a: ["Northumbria", "Kent", "Mercia", "East Anglia"], c: 2 },
+    { q: "What happened in AD 927?", a: ["The Battle of Hastings", "The creation of England by Wessex", "The Roman invasion", "The death of Thomas Becket"], c: 1 },
+    { q: "On which hill did Harold Godwinson form his shield wall?", a: ["Senlac Hill", "Battle Hill", "Roman Hill", "Hastings Mount"], c: 0 },
+    { q: "What tactic did William use to break the shield wall?", a: ["Trebuchets", "Feigned retreats", "Surprise night attacks", "Starving them out"], c: 1 },
+    { q: "What is a 'fief' in the feudal system?", a: ["A tax paid to the king", "A large section of land given to a supporter", "A type of soldier", "A stone castle"], c: 1 },
+    { q: "What were the unfree peasants called?", a: ["Barons", "Knights", "Villeins or serfs", "Lords"], c: 2 },
+    { q: "What was the 'code of chivalry' expected of knights?", a: ["To be wealthy and powerful", "To be brave, loyal, and fair", "To own as much land as possible", "To rule over the king"], c: 1 },
+    { q: "Why were castles important to the Normans?", a: ["They were luxury palaces for peasants", "They were military strongholds to show power", "They were used as marketplaces", "They were solely for religious worship"], c: 1 }
+];
+
+const reasoningQuestions = [
+    { q: "Why was the Roman Empire's choice of 'Senlac Hill' a disadvantage for the Normans?", exp: "The hill was defensive; fighting downhill is easier for the defenders, while the marshland at the sides made it difficult and slow for Norman horses and soldiers to attack." },
+    { q: "Why did the feudal system make it difficult for anyone to rebel against the King?", exp: "Everyone swore oaths of loyalty; breaking them was both a crime and a sin. Furthermore, no single baron was powerful enough to challenge the king, and Norman castles/knights were positioned to crush uprisings quickly." },
+    { q: "How did the Romans change the social structure regarding gender?", exp: "The Celts were more equal, allowing women to be tribal leaders; the Romans introduced a patriarchal society where men were in charge of women." }
+];
+
+const theoryQuestions = [
+    { q: "Explain the purpose of the feudal system.", exp: "It was a hierarchy of land and loyalty (King → Barons → Knights → Peasants) designed to help the king reward supporters, defend the kingdom, and ensure control over the population." },
+    { q: "What was the significance of 'continuity' during the Roman occupation?", exp: "Continuity refers to things that remained the same. For example, most Celts continued to speak their own languages, live in traditional roundhouses in the countryside, and worship their original gods alongside Roman ones." },
+    { q: "Describe the role of a 'Bretwalda'.", exp: "A Bretwalda was the ruler of the most powerful Anglo-Saxon kingdom, who held influence over all other Anglo-Saxon kings due to their military and political power." },
+    { q: "Why was King Ethelbert of Kent particularly powerful?", exp: "He married Bertha, the daughter of a very rich Frankish king, which provided him with more money than other Anglo-Saxon kings, allowing him to dominate neighboring kingdoms." },
+    { q: "How did the Romans use infrastructure for sanitation?", exp: "They built aqueducts for fresh water, sewers for waste disposal, and public toilets to maintain cleanliness, though these were mainly concentrated in towns and forts." }
+];
+
+const applicationQuestions = [
+    { q: "If you were an Anglo-Saxon peasant, why might you stay loyal to your lord?", exp: "You relied on your lord for protection from attack and a place to live/farm." },
+    { q: "Compare the homes of the poor and the rich in Roman Britain.", exp: "The rich lived in mansions like domus (town) or villas (countryside) built of brick and stone; the poor lived in insulae (flats) in towns or traditional roundhouses made of wood, mud, and straw in the countryside." },
+    { q: "How does the modern calendar reflect Roman influence?", exp: "We use the Julian calendar framework (365 days, leap years) and many months are named after Roman figures or religious concepts (e.g., July for Julius Caesar, August for Augustus)." },
+    { q: "Why might the Norman army have panicked during the Battle of Hastings?", exp: "A rumor spread that William had been killed; he had to remove his helmet and ride along the lines to prove he was alive and prevent a rout." },
+    { q: "Why was the location of a castle significant?", exp: "Castles were often built on high ground to act as defensive strongholds and to be visible, serving as a reminder of Norman power and a place to quickly crush local rebellions." },
+    { q: "How did geography influence Anglo-Saxon kingdom power?", exp: "Stronger kingdoms conquered weaker ones. For example, Mercia built Offa’s Dyke to protect the border against the Welsh, showing how geography defined kingdom borders and strategy." },
+    { q: "Evaluate the effectiveness of the 'shield wall' tactic.", exp: "It was highly effective at blocking arrows and defending against infantry and cavalry charges on uphill terrain, but it was vulnerable if the defenders were tricked into breaking their formation." },
+    { q: "Why were knights considered the 'backbone' of the Norman army?", exp: "They were trained warriors, expert in fighting on horseback, and their discipline allowed William to maintain order and conduct large-scale warfare." },
+    { q: "How did Roman roads change communication?", exp: "Before Romans, there were only dirt tracks. The Romans built 10,000 miles of roads, connecting important hubs like Richborough, Canterbury, and London." },
+    { q: "Analyze the impact of Roman trade on Britain's population.", exp: "Soldiers, traders, and slaves arrived from across the Roman Empire (e.g., Africa, the Middle East, Europe), adding diversity to towns and forts, though most of the countryside remained ethnically Celtic." }
+];
+
+// Build MCQ layout
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="feedback" id="mc-feedback-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Build Written layouts
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your response here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Model Answer Explanation:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+populateWrittenSection('application-container', applicationQuestions, 'app');
+
+// Grade function
+function gradeAssessment() {
+    let score = 0;
+    
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const feedback = document.getElementById(`mc-feedback-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        if(selected) {
+            const answerVal = parseInt(selected.value);
+            if(answerVal === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${answerVal}`).classList.add('correct-answer');
+                feedback.innerHTML = "✓ Correct";
+                feedback.style.color = "var(--success)";
+            } else {
+                document.getElementById(`mc-label-${index}-${answerVal}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                feedback.innerHTML = `✗ Incorrect.`;
+                feedback.style.color = "var(--danger)";
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            feedback.innerHTML = "⚠️ Unanswered.";
+            feedback.style.color = "var(--gray)";
+        }
+    });
+
+    const revealExplanations = (prefix, count) => {
+        for(let i = 0; i < count; i++) {
+            document.getElementById(`${prefix}-exp-${i}`).style.display = 'block';
+        }
+    };
+
+    revealExplanations('reason', reasoningQuestions.length);
+    revealExplanations('theory', theoryQuestions.length);
+    revealExplanations('app', applicationQuestions.length);
+
+    const resBox = document.getElementById('results-box');
+    resBox.style.display = "block";
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
