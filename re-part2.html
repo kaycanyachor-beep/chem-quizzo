@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 RE Comprehensive Review (Part 2)</title>
+    <style>
+        :root {
+            --primary: #415a77;
+            --primary-dark: #1b263b;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #e0e1dd;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #e0e1dd;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #f4f5f7;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: #eaeaea;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 RE Revision (Omitted Topics Extension)</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> This quiz explicitly targets the finer details, scriptures, timelines, and specific text matches omitted from the first review. Answer the 60 new multiple-choice questions and provide explanations in the written boxes. Click <strong>"Submit Test"</strong> to review the model answers instantly.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Extension Quiz Complete!</h2>
+        <div class="score-display" id="final-score">0 / 60</div>
+        <p>Your grades are processed! See the verified notes content and structural keys below.</p>
+    </div>
+
+    <form id="re-form-ext">
+        <div class="section-heading">Part 1: Detailed Omitted Multiple Choice (1 - 60)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 2: Extended Reasoning Questions</div>
+        <div id="reasoning-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 3: Extended Theory Questions</div>
+        <div id="theory-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Test & Show Explanations</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    // Module 1 Deep Dive Omissions
+    { q: "What unique action did God do on Day 2 of creation in Genesis 1?", a: ["He gathered the waters to let dry land appear", "He made an expanse called Heaven to separate the waters", "He created plants and trees", "He created light and separated it from darkness"], c: 1, exp: "According to Genesis 1, on Day 2 God makes an expanse to separate the waters from each other and calls it 'Heaven'[cite: 4]." },
+    { q: "On which day of Genesis 1 creation did God make the sun, moon, and stars?", a: ["Day 1", "Day 3", "Day 4", "Day 6"], c: 2, exp: "On Day 4, God makes the lights in the sky: sun, moon, and stars[cite: 4]." },
+    { q: "What did God create on Day 5 of the Genesis 1 timeline?", a: ["Animals that live on land and humans", "Plants and trees", "Living creatures in the waters and the skies", "The expanse called Heaven"], c: 2, exp: "On Day 5, God makes living creatures in the waters and the skies[cite: 4]." },
+    { q: "According to Genesis 2:7, how did God form man?", a: ["From a rib taken out of an animal", "From the dust of the ground and breathed into his nostrils", "By separating light from darkness", "Through structural evolutionary stages over millions of years"], c: 1, exp: "Genesis 2:7 states: 'then the LORD God formed the man of dust from the ground and breathed into his nostrils the breath of life'[cite: 4]." },
+    { q: "What responsibility did the man receive in Genesis 2:19 regarding the animals?", a: ["To sacrifice them at the altar", "To see what he would call them", "To build them shelters of mud and straw", "To prevent them from entering the water"], c: 1, exp: "Genesis 2:19 states that God brought every beast and bird to the man to see what he would call them[cite: 4]." },
+    { q: "How is the creation of woman described structurally in Genesis 2?", a: ["She was made from dust on Day 5", "She was created from the man's rib as the right companion", "She was made out of the elements of Heaven", "She was introduced as an angel from Gabriel"], c: 1, exp: "Genesis 2 states that God creates a woman from the man's rib, and the man sees she is the right companion[cite: 4]." },
+    { q: "What group provides the rooted scriptural basis and wisdom forming Catholic Social Teaching (CST)?", a: ["The United Nations assembly", "Church leaders and charities such as CAFOD and the SVP", "Gentile converts from Rome", "The elder Arius in Egypt"], c: 1, exp: "CST is rooted in Scripture, formed by the wisdom of Church leaders, and influenced by charities such as CAFOD and the SVP[cite: 4]." },
+    { q: "Which of the following is NOT one of the listed 7 principles of Catholic Social Teaching?", a: ["Solidarity", "The Common Good", "Dignity of work and participation", "Pontifical Monarchy"], c: 3, exp: "The seven principles are Dignity, Solidarity, The Common Good, The option for the Poor, Peace, Care for Creation, and Dignity of work and participation[cite: 4]." },
+    { q: "What is the name of CAFOD's recent campaign based on Pope Francis' encyclical?", a: ["Rose Sunday Action", "Care for the Common Home", "The Great Amen Movement", "The Luminous Mysteries Initiative"], c: 1, exp: "One of CAFOD's recent campaigns is 'Care for the Common Home', based on Pope Francis' encyclical, Laudato Si[cite: 4]." },
+    { q: "What did Pope Francis say about young people in Laudato Si 13?", a: ["They prefer the outdated language of old books", "They demand change and wonder how anyone can build a better future without thinking of the environmental crisis", "They must celebrate Confirmation at age seven", "They should avoid the use of biblical idioms"], c: 1, exp: "Laudato Si 13 notes: 'Young people demand change. They wonder how anyone can claim to be building a better future without thinking of the environmental crisis...'[cite: 4]" },
+    { q: "According to the UN 2025 Goals framework in the notes, what is Goal number 1?", a: ["Zero hunger", "No poverty", "Clean water and sanitation", "Climate action"], c: 1, exp: "The table marks Goal 1 as 'No poverty'[cite: 4]." },
+    { q: "According to the UN Goals table, which number corresponds to 'Responsible consumption and production'?", a: ["Goal 6", "Goal 8", "Goal 11", "Goal 12"], c: 3, exp: "Goal 12 is 'Responsible consumption and production'[cite: 4]." },
+    { q: "What is designated as UN Sustainable Development Goal 14?", a: ["Conserve and protect life below water", "Conserve and protect life on land", "Affordable and clean energy", "Gender equality"], c: 0, exp: "Goal 14 is 'Conserve and protect life below water'[cite: 4]." },
+    { q: "What background factor motivated Sister Dorothy Stang to spend her life working in Brazil?", a: ["Her training as a global corporate business executive", "Her faith in God", "An invitation from an ecumenical council in Rome", "A mandate from the United Nations"], c: 1, exp: "The notes state: 'Sr Dorothy's faith in God motivated her to spend the rest of her life doing this work in Brazil'[cite: 4]." },
+    { q: "Who hired the killers that murdered Sister Dorothy Stang on 12 February 2005?", a: ["The local parish priests", "Two wealthy landowners who wanted to stop her campaigns", "Deforested settler farmers", "The Roman military authorities"], c: 1, exp: "She was murdered by killers hired by two wealthy landowners who wanted to stop her campaigns to save the rainforest[cite: 4]." },
+    { q: "If a book of the Bible is in the New Testament, how should you start looking for it?", a: ["From the front of the Bible", "From the back of the Bible", "By checking the Torah framework", "By consulting the Liturgy of the Eucharist"], c: 1, exp: "The step-by-step navigation instructions state: 'If the book is in the New Testament start looking from the back'[cite: 4]." },
+    { q: "When navigating the Bible, what does the tiny little number represent?", a: ["The Page number", "The Chapter number", "The Verse number", "The Book order index"], c: 2, exp: "The instructions note: 'Finally look for the relevant verse - Remember this will be the tiny little number'[cite: 4]." },
+    { q: "Why do some people prefer the King James Version over modern translations?", a: ["It uses a modern vocabulary that appeals to young children", "They believe it is more accurate, familiar, and poetic", "It completely removes the Old Testament books", "It was written directly by St Luke"], c: 1, exp: "Some prefer it because they believe it is more accurate, familiar, and its poetic language reminds them it is a special book[cite: 4]." },
+    { q: "What is a main criticism or limitation of older Bible versions like the King James Version?", a: ["The language is outdated and may put younger people off", "It does not contain the 5 books of Moses", "It cannot be read at Mass", "It was banned by the Magisterium"], c: 0, exp: "The notes list that the language is outdated, many words aren't in use, and it may put younger people off because they don't understand it[cite: 4]." },
+    { q: "Into what sections is the New Testament divided as a library?", a: ["Law, History, Wisdom, and Prophets", "Gospels, Acts of the Apostles, Letters, and Book of Revelation", "Torah, Tanakh, and Sacred Traditions", "Introductory Rites, Liturgy of the Word, and Communion"], c: 1, exp: "The New Testament library contains: Gospels, Acts of the Apostles, Letters, and Book of Revelation[cite: 4]." },
+    { q: "What is the 'Tanakh'?", a: ["An encyclical written by Pope Francis", "The Jewish sacred text, also called the 'Hebrew Bible'", "A set of prayers spoken using rosary beads", "An illuminated manuscript from Ireland"], c: 1, exp: "The Jewish sacred text is called the Tanakh or the 'Hebrew Bible'[cite: 4]." },
+    { q: "What are the first five books of the Tanakh called?", a: ["The Gospels", "The Letters", "The Torah", "The Wisdom books"], c: 2, exp: "The Torah - the first five books of the Tanakh - outlines laws for Jews to follow[cite: 4]." },
+    { q: "Where does the text of 2 Timothy 3:16 state that all Scripture comes from?", a: ["Breathed out by God", "Composed entirely by the Magisterium", "Discovered during the 16th century Reformation", "Decided at the Council of Jerusalem"], c: 0, exp: "2 Timothy 3:16-17 states: 'All Scripture is breathed out by God and profitable for teaching...'[cite: 4]" },
+    { q: "Where does Sacred Tradition (apostolic tradition) fundamentally come from?", a: ["The United Nations goals", "The original preaching and actions of the apostles", "Modern English translations", "The scientific views of Stephen Hawking"], c: 1, exp: "Sacred tradition comes from the original preaching and actions of the apostles[cite: 4]." },
+    { q: "What is the 'Book of Kells'?", a: ["A modern book containing biblical idioms", "An illuminated manuscript where words and pages are decorated in an elaborate style", "An encyclical written by Pope St John Paul II", "The text detailing the life of Fr Mychal Judge"], c: 1, exp: "The Book of Kells is an illuminated manuscript, meaning its words and pages are decorated in an elaborate style to explain and glorify their meaning[cite: 4]." },
+    { q: "What is the definition of an idiom?", a: ["A structural rule given by a bishop", "A group of words established by usage as having a meaning not deducible from those of individual words", "A type of fine art produced in America", "A liturgical prayer repeated three times"], c: 1, exp: "An idiom is defined as a group of words having a meaning not deducible from individual words[cite: 4]." },
+    { q: "Which of the following is listed as a biblical idiom originating from scripture?", a: ["Over the moon", "By the sweat of your brow", "Rose Sunday", "Abba Father"], c: 1, exp: "'By the sweat of your brow' is listed under examples of biblical idioms[cite: 4]." },
+    { q: "What specific mystery of the Rosary is categorized under the Luminous Mysteries?", a: ["The Annunciation", "The Agony in the Garden", "The Resurrection", "The Baptism of Jesus"], c: 3, exp: "The table shows 'The Baptism of Jesus' is associated with the Luminous Mysteries[cite: 4]." },
+    { q: "What spiritual focus or quality is linked to 'The Sorrowful Mysteries' of the rosary in the notes?", a: ["Love", "Forgiveness", "Faith", "Trust in God"], c: 1, exp: "The diagram explicitly connects 'The Sorrowful Mysteries' (The Agony in the Garden) with Forgiveness[cite: 4]." },
+    { q: "What are the two main structural parts of the Liturgy of the Mass?", a: ["Old Testament and New Testament", "Liturgy of the Word and Liturgy of the Eucharist", "Sacred Scripture and Sacred Tradition", "Ordinary Magisterium and Conciliar Magisterium"], c: 1, exp: "The notes explicitly state: 'There are two main parts to the Liturgy of the Mass: -the gathering, the liturgy of the Word... - the liturgy of the Eucharist...'[cite: 4]" },
+
+    // Module 2 Deep Dive Omissions
+    { q: "What does the Latin phrase 'became flesh' directly translate to in Christian theology?", a: ["Revelation", "Incarnation", "Magisterium", "Transubstantiation"], c: 1, exp: "'The incarnation' means 'became flesh'[cite: 3]." },
+    { q: "Which text refers to Jesus specifically as the 'Only Begotten Son of God'?", a: ["Laudato Si", "Gaudium et Spes", "The Nicene Creed", "The Book of Kells"], c: 2, exp: "The Nicene Creed refers to Jesus as the 'Only Begotten Son of God'[cite: 3]." },
+    { q: "According to Youth Catechism paragraph 74, what does the expression 'Son of God' mean?", a: ["Jesus was one of many sons who became prophets", "Of all human beings only Jesus is more than a man", "Jesus was a symbol created by early disciples", "Jesus was a Gentile leader"], c: 1, exp: "Youth Catechism 74 says 'the expression means that of all human beings only Jesus is more than a man'[cite: 3]." },
+    { q: "In which century and city did the Christian elder Arius live?", a: ["1st Century in Jerusalem", "4th Century in Alexandria in Egypt", "16th Century in London", "20th Century in New York"], c: 1, exp: "Arius was a Christian elder who lived in the 4th Century in Alexandria in Egypt[cite: 3]." },
+    { q: "Why was it difficult for the early Church to keep all teachings the same during Arius's time?", a: ["Because the Church was just beginning to write down their teachings", "Because the books of the Bible were completely lost", "Because the Pope refused to call any councils", "Because it was banned by corporate social responsibility"], c: 0, exp: "The notes state it was difficult because the Church was just beginning to write down their teachings and many new Christians had new ideas[cite: 3]." },
+    { q: "In what way is Jesus shown as the 'Son of Man' in the notes?", a: ["By wearing red vestments during local festivals", "In the way he suffers on the cross, in service of our sins", "By establishing the line of kings over Israel", "By translating old texts into modern formats"], c: 1, exp: "Jesus is the Son of Man in the way he suffers on the cross, in service of our sins[cite: 3]." },
+    { q: "What power does Jesus exercise that demonstrates his identity as the Son of Man?", a: ["He acts with authority to forgive sins", "He controls the physical properties of the sun and moon", "He commands the Roman army to leave Britain", "He alters the 17 Sustainable Development goals"], c: 0, exp: "The notes explicitly say: 'Jesus acts with authority to forgive sins' under the Son of Man section[cite: 3]." },
+    { q: "How do Christians show their acceptance of and obedience to God when praying?", a: ["By reading the King James Version only", "By addressing Jesus as 'Lord'", "By modifying the structure of the Mass", "By creating pieces of fine art"], c: 1, exp: "Addressing Jesus as 'Lord' is a way for Christians to show their acceptance of, and obedience to, God[cite: 3]." },
+    { q: "What is a main theme found throughout all of Jesus' work that shows his goodness?", a: ["Expanding naval routes and military might", "Love and forgiveness, improving a person's soul", "Strict literal reading of ancient laws", "Challenging the structural authority of the bishops"], c: 1, exp: "A main theme throughout all of Jesus' work is that of love and forgiveness[cite: 3]." },
+    { q: "What type of accusation has been brought against powerful global businesses?", a: ["Acting selflessly to distribute free grain", "Acting selfishly by exploiting workers and producers in developing nations", "Following the rules of the Council of Jerusalem too strictly", "Demanding a literal translation of scripture"], c: 1, exp: "Many powerful businesses have been accused of acting selfishly by exploiting workers and producers in developing nations[cite: 3]." },
+    { q: "What principle of Catholic Social Teaching is violated when a business fails to pay a fair wage?", a: ["The creation of an expanse called Heaven", "The dignity of the human person", "The apostolic succession of bishops", "The use of conciliar magisterium"], c: 1, exp: "Not paying a fair wage to workers goes against the principle of the dignity of the human person from CST[cite: 3]." },
+    { q: "What environmental issues are driven by global corporate demands according to the notes?", a: ["The cooling of stars after the Big Bang", "Intensive farming and forest clearance", "The expansion of stone pipes and aqueducts", "Deforestation of the local Kent kingdom"], c: 1, exp: "The environment is being damaged due to intensive farming and forest clearance, to satisfy global demands[cite: 3]." },
+    { q: "What was the exact birth name and date of Father Mychal Judge?", a: ["Robert Emmett Judge, born on 11th May 1933", "Donald Jackson, born in 1966", "Dorothy Stang, born in 1931", "Theotonius Gomes, born in 1927"], c: 0, exp: "He was born Robert Emmett Judge on 11th May 1933[cite: 3]." },
+    { q: "What specific religious order did Father Mychal Judge belong to?", a: ["The Protestant Reformation elder group", "American Franciscan friar", "The Gentile Apostles community", "The SVP charity directors"], c: 1, exp: "He was an American Franciscan friar and Catholic priest[cite: 3]." },
+    { q: "What group of people did Father Mychal Judge serve through his compassionate ministry?", a: ["Wealthy landowners in Brazil", "The homeless, addicts, and AIDS patients", "Roman soldiers in Britain", "Bishops attending ecumenical councils"], c: 1, exp: "He is best known for his service as a chaplain to the FDNY and his compassionate ministry to the homeless, addicts, and AIDS patients[cite: 3]." },
+    { q: "What historical designation does Father Mychal Judge hold regarding the September 11 attacks?", a: ["He was the author of Sacrosanctum Concilium", "He was the first certified fatality of the September 11 attacks", "He was the founder of corporate social responsibility", "He painted Rublev's Trinity"], c: 1, exp: "Father Mychal Judge was the first certified fatality of the September 11 attacks[cite: 3]." },
+    { q: "What specific religious rite was Father Mychal Judge administering when he died?", a: ["The Sacrament of Baptism", "Last rites to victims at the World Trade Centre", "The Confirmation promise", "The sanctus song of praise"], c: 1, exp: "He died while administering last rites to victims at the World Trade Centre[cite: 3]." },
+    { q: "What phrase describes the time period running up to Easter Sunday?", a: ["The Pentecost season", "Holy Week", "The Luminous timeline", "The Liturgy of the Word"], c: 1, exp: "The last few days of Jesus' life are remembered during Holy Week, the week running up to Easter Sunday[cite: 3]." },
+    { q: "What does Sacrosanctum Concilium 7 state about Christ's presence?", a: ["Christ is only present in the Old Testament books", "Christ is always present in His Church, especially in its liturgical celebrations", "Christ leaves the Church when a schism happens", "Christ is only present if the language is poetic"], c: 1, exp: "Sacrosanctum Concilium 7 states: 'To accomplish so great a work, Christ is always present in His Church, especially in [the Church's] liturgical celebrations'[cite: 3]." },
+    { q: "What does Catechism paragraph 1364 say happens when the Church celebrates the Eucharist?", it: ["The sacrifice Christ offered once for all on the cross is made present", "A new book is added to the New Testament library", "The physical elements change their color to red", "The congregation must re-verify their baptismal vows"], c: 0, exp: "CCC 1364 teaches that when the Church celebrates the Eucharist, 'it is made present the sacrifice Christ offered once for all on the cross'[cite: 3]." },
+
+    // Module 3 Deep Dive Omissions
+    { q: "What specific historical reference names the names used for the Eucharist by early Christians?", a: ["The Lord's Supper and The Breaking of the Bread", "The Holy Trinity Gathering", "The Paschal Mystery Rite", "The Great Amen Celebration"], c: 0, exp: "The Breaking of Bread and The Lord's Supper were names used by early Christians[cite: 3]." },
+    { q: "From what Latin word does the name 'Mass' originate, and what does it mean?", a: ["'Missio' meaning 'mission'", "'Magisterium' meaning 'teachers'", "'Martyr' meaning 'witness'", "'Mychal' meaning 'hope'"], c: 0, exp: "Mass comes from the Latin word 'missio' meaning 'mission'[cite: 3]." },
+    { q: "What is the function of the 'Introductory Rites' in the structure of the Mass?", a: ["To send us out to spread the word of God", "To set the tone and ask for forgiveness before receiving Jesus", "To read sections from the prophets", "To collect money for CAFOD campaigns"], c: 1, exp: "The Introductory Rites set the tone for Mass and we ask for forgiveness before receiving Jesus[cite: 3]." },
+    { q: "What occurs during the 'Concluding Rites' of the Mass?", a: ["The congregation sings the Sanctus three times", "We are sent out to use what we have received and spread the word of God", "The bread changes into flesh", "The priest answers questions about Arius"], c: 1, exp: "In the Concluding Rites, 'We are sent out to use what we have received and spread the word of God'[cite: 3]." },
+    { q: "How did the early Christian community show commitment to acts of love and charity?", a: ["By building large defensive castles", "By selling their possessions to help those in poverty", "By moving their families to Italy", "By rewriting the Nicene Creed"], c: 1, exp: "The notes state: 'The Christian community is committed to acts of love and charity, with its members selling their possessions to help those in poverty'[cite: 3]." },
+    { q: "What do Christians of the Church of England believe regarding the bread and wine?", a: ["They become the actual physical flesh and blood via transubstantiation", "They hold the spiritual presence of the body and blood but do not become it", "They are a physical hazard for young children", "They have no symbolic or real connection to the Last Supper"], c: 1, exp: "Church of England Christians believe that the bread and wine hold the spiritual presence of the body and blood of Jesus but do not become it[cite: 3]." },
+    { q: "What country is Bishop Theotonius Gomes from?", a: ["Egypt", "Brazil", "Bangladesh", "Italy"], c: 2, exp: "Bishop Theotonius Gomes is from Bangladesh[cite: 3]." },
+    { q: "What dark situation on human civilization did Bishop Gomes address on World Food Day?", a: ["The use of modern English translations", "Lack of food for the poor, especially large numbers dying of hunger", "The separation of the Church of England from Rome", "The rejection of the Big Bang theory"], c: 1, exp: "He stated that lack of food for the poor, especially large numbers dying of hunger, is the most 'un-eucharistic situation on earth'[cite: 3]." },
+    { q: "What is the Catholic Church's teaching on 'Blessed Sacrament processions'?", a: ["They are a waste of time that distracts from scripture", "They are a faithful act of worship and a way to publicly celebrate faith", "They are only permitted during Rose Sunday in Italy", "They are completely forbidden by the Council of Trent"], c: 1, exp: "The Catholic Church teaches that processions of the Blessed Sacrament are a faithful act of worship[cite: 3]." },
+    { q: "What advice does the Church offer regarding cultural elements in Blessed Sacrament processions?", a: ["Cultural elements must be completely eliminated", "How to include cultural elements without distracting from the purpose of the procession", "To only allow songs from the King James Version", "To replace bread with rose petals"], c: 1, exp: "The Church offers advice on how to include cultural elements without distracting from the purpose of the procession[cite: 3]." }
+];
+
+const reasoningQuestions = [
+    { q: "Why do Catholics believe that faith must work alongside human reason when analyzing the origins of the universe?", exp: "According to the notes, faith and reason must work together. Scientists like Father Lemaitre (a Catholic priest) and Stephen Hawking used reason to find evidence supporting the Big Bang theory. Catholics believe reason helps people understand the universe better, while faith is a gift from God providing the deepest answers to why life exists, meaning science and the Bible reveal different aspects of the same reality rather than conflicting[cite: 4]." },
+    { q: "Why does the Church utilize different levels and forms of the Magisterium?", exp: "The notes outline that the Church has faced theological challenges, disagreements, and errors throughout history. To maintain Church unity and offer definitive answers on matters of faith, the teaching authority (formed of the Bishops) operates on multiple levels—Ordinary, Conciliar (such as ecumenical councils), and Pontifical—ensuring the Church can effectively protect, interpret, and write down its teachings over time[cite: 3, 4]." },
+    { q: "Why was the Last Supper historically structured around a Passover meal, and how did Jesus alter its meaning?", exp: "The notes state that the Last Supper was a traditional Passover meal. Jesus gave entirely new meaning to the traditional symbols; he instructed his disciples to eat bread and drink wine in remembrance of him, declaring the bread to be his body and the wine to be his blood. This anticipated his sacrificial death on the cross, transforming the Passover lamb sacrifice into a New Covenant to free humanity from the slavery of sin[cite: 3]." }
+];
+
+const theoryQuestions = [
+    { q: "Detail the specific events of creation from Day 1 to Day 4 as recorded in Genesis 1.", exp: "Based strictly on the Genesis 1 text box: Day 1: God creates light, separating it from darkness, calling them 'Day' and 'Night'. Day 2: God makes an expanse to separate the waters from each other and calls it 'Heaven'. Day 3: God gathers the waters, lets dry land appear (calling it earth), and creates plants and trees. Day 4: God makes the lights in the sky: the sun, moon, and stars[cite: 4]." },
+    { q: "Explain the connection between Pope Francis' encyclical 'Laudato Si' and the moral principles of stewardship.", exp: "Stewardship is the human responsibility to care for and look after God's creation, with each individual answerable for their environmental impact. Pope Francis' encyclical, Laudato Si, underpins campaigns like CAFOD's 'Care for the Common Home', which demands that Catholics respond directly to the dual crises: 'the cry of the earth and the cry of the poor', explicitly warning against ignoring environmental suffering[cite: 4]." },
+    { q: "Describe the controversy surrounding Arius and why it prompted structural changes in how Church teachings were handled.", exp: "Arius was a 4th-century Christian elder in Alexandria, Egypt, who began questioning established Church teachings. At this point in history, the universal Church was just beginning to officially write down their doctrines, making it difficult to keep all teachings uniform as new ideas spread. This friction meant the Church had to transition toward formal ecumenical councils and explicit creeds (like the Nicene Creed) to counter errors and protect unity[cite: 3]." },
+    { q: "Compare the specific theological beliefs regarding the Eucharist held by Catholics, the Church of England, and general Christian commemoration.", exp: "Catholics believe in transubstantiation, where the bread and wine become the actual flesh and blood of Jesus Christ, making his real presence manifest. Church of England Christians believe the bread and wine hold the spiritual presence of Jesus' body and blood but do not physically become it. Other Christians view Holy Communion purely as a symbolic re-enactment or commemoration of the Last Supper[cite: 3]." },
+    { q: "Explain how localized, cultural customs are utilized to celebrate Pentecost in Italy and Poland.", exp: "Liturgically, priests wear red vestments to symbolize the tongues of fire. Nationally and culturally: In Italy, Pentecost is known as 'Rose Sunday', and churches scatter rose petals through the ceiling to visually symbolize the descending tongues of fire. In Poland, local communities decorate their homes with greenery in the hope that God's blessing will come to their families[cite: 2]." }
+];
+
+// Populate Extended Elements
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+function populateWrittenSection(containerId, dataArray, prefix) {
+    const targetContainer = document.getElementById(containerId);
+    dataArray.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">${data.q}</div>
+            <textarea id="${prefix}-text-${index}" placeholder="Type your notes-based analysis here..."></textarea>
+            <div class="explanation-box" id="${prefix}-exp-${index}">
+                <strong>Verified Notes Content Key:</strong><br>${data.exp}
+            </div>
+        `;
+        targetContainer.appendChild(card);
+    });
+}
+populateWrittenSection('reasoning-container', reasoningQuestions, 'reason');
+populateWrittenSection('theory-container', theoryQuestions, 'theory');
+
+// Grade function
+function gradeQuiz() {
+    let score = 0;
+    
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+
+        expBox.style.display = 'block';
+
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br>${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br>${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br>${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<reasoningQuestions.length; i++) {
+        document.getElementById(`reason-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<theoryQuestions.length; i++) {
+        document.getElementById(`theory-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
