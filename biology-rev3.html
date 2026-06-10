@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 Biology Revision 3</title>
+    <style>
+        :root {
+            --primary: #52b788;
+            --primary-dark: #081c15;
+            --success: #40916c;
+            --danger: #ba181b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #d8f3dc77;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f5fafd;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #f2fcf6;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: #1b4332;
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        pre {
+            background: #212529;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 Biology Revision - Part 3</h1>
+    <div class="intro">
+        <p><strong>Section Guidelines:</strong> Complete the 30 multiple-choice questions focusing on practical cell preparation, joint structures, and mineral pathways. Then attempt the application questions based on your provided worksheet layouts. Click <strong>"Submit Assessment"</strong> to unlock solutions.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Marking Summary</h2>
+        <div class="score-display" id="final-score">0 / 30</div>
+        <p>Scroll down to check explanations and structural criteria.</p>
+    </div>
+
+    <form id="bio-form-3">
+        <div class="section-heading">Sub-Section A: Advanced Multiple Choice Base (1 - 30)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Sub-Section B: Reasoning &amp; Theory Analysis</div>
+        <div id="written-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Sub-Section C: Worksheet Formatting Application Questions</div>
+        <div id="worksheet-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz3()">Submit Assessment &amp; Reveal Keys</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    { q: "Where exactly are white and red blood cells generated inside the skeletal system?", a: ["In the synovial fluid casing", "Inside the yellow marrow of long cartilage", "Inside bone marrow", "Along the outer periosteum lining"], c: 2, exp: "Your skeletal organ system notes confirm that the bone marrow is specifically responsible for generating white and red blood cells." },
+    { q: "What specific anatomical name defines fluid-lubricated joints such as the knee, shoulder, elbow, and hip?", a: ["Antagonistic joints", "Synovial joints", "Cartilaginous bands", "Fixed sutures"], c: 1, exp: "Synovial joints contain specialized synovial fluid that minimizes friction inside moving skeletal intersections." },
+    { q: "What specific growth abnormality is observed if a young plant suffers from a nitrate mineral deficiency?", a: ["Poor leaf pigmentation with healthy stem height", "Stunted growth and yellowing leaves", "Immediate formation of excess root hairs", "The roots rot due to lack of glucose"], c: 1, exp: "According to the plant mineral nutrition table, nitrates are essential for protein synthesis; a deficiency leads to stunted growth and yellow leaves." },
+    { q: "Which plant mineral must be absorbed to ensure the healthy structural growth of a root system?", a: ["Magnesium", "Nitrates", "Phosphates", "Potassium"], c: 2, exp: "The table explicitly pairs phosphates with the healthy growth of a plant's root network." },
+    { q: "What specific symptom indicates that a growing plant has developed a potassium mineral deficiency?", a: ["The leaves display broad green networks with no stem support", "Poor flower yields and leaves showing dead spots or yellow edges", "The roots absorb excess water rapidly", "The permanent vacuole bursts open"], c: 1, exp: "Potassium is required for healthy leaves and flowers; a deficiency presents as poor growth, yellowing, and dead spots." },
+    { q: "Why is magnesium an absolute operational requirement for green plants?", a: ["It provides an anchor for the stem base", "It is required for the production of chlorophyll", "It prevents water from evaporating out of stomata", "It replaces glucose inside the cytoplasm during winters"], c: 1, exp: "Magnesium forms the central element needed to produce chlorophyll, the pigment that traps light for photosynthesis." },
+    { q: "What initial step must a student take when positioning a slide on a microscope stage to prevent lens damage?", a: ["Switch directly to the highest magnification lens", "Turn the nosepiece to select the lowest power objective lens", "Pour ethanol across the condenser lens mirror", "Adjust the fine focus wheel to its maximum limit"], c: 1, exp: "Always start checking a specimen profile using the lowest power objective lens to establish a broad field of view safely." },
+    { q: "What components open and close stomata pores to manage leaf gas diffusion values?", a: ["Continuous xylem tubes", "Pairs of specialized guard cells", "Spongy mesophyll partitions", "Cellulose cell walls"], c: 1, exp: "Stomata pores are bordered by guard cells that expand or contract to open or close the gap." },
+    { q: "What spatial eye adaptation do predatory animals have to help them hunt?", a: ["Eyes situated on the sides of their heads to expand peripheral vision", "Forward-facing eyes to judge distances and lock onto prey", "Zero retinal components to filter blinding snow light", "Small biconcave internal crystalline lenses only"], c: 1, exp: "Predators have forward-facing eyes to provide binocular vision, allowing them to accurately judge distances to catch prey." },
+    { q: "What eye placement allows prey species to monitor threats from behind while feeding?", a: ["Forward-facing eyes focused on the ground", "Eyes positioned on the sides of their heads for a wide field of view", "A single large vertical compound lens", "Retinal paths located inside the bone marrow"], c: 1, exp: "Prey animals feature lateral eye positions (on the sides of the head) to maintain a wide field of view to watch for danger." },
+    { q: "What happens to photosynthesis enzymes if ambient temperature climbs far past optimal limits?", a: ["They continuously speed up the conversion rate", "The proteins denature, slowing down and eventually stopping the process", "They break down glucose into sulfuric acid", "They alter their molecular mass into carbon particles"], c: 1, exp: "Photosynthesis relies on enzymes. High temperatures denature these proteins, changing their shape so they can no longer function." },
+    { q: "Which leaf tissue section features loosely packed cells with wide air gaps to facilitate gas exchange?", a: ["Palisade mesophyll tier", "Spongy mesophyll layer", "Upper waxy epidermis cuticle", "Hollow xylem cell pathways"], c: 1, exp: "The loose, un-packed arrangement of cells in the spongy mesophyll layer allows carbon dioxide and oxygen to circulate easily." },
+    { q: "What color does iodine solution remain if applied to an area of a leaf that lacks starch?", a: ["Deep blue-black", "Orange-brown", "Bright pinkish purple", "Clear and completely colourless"], c: 1, exp: "Iodine is an indicator that turns blue-black in the presence of starch; if no starch is present, it retains its original orange-brown color." },
+    { q: "What is the primary function of the muscular tissue layer positioned inside the wall of the human stomach?", a: ["To manufacture amylase enzymes", "To churn and mix food with digestive tracking juices", "To filter dissolved glucose directly into the lungs", "To insulate internal organs from temperature fluctuations"], c: 1, exp: "The muscular layer contracts rhythmically to mechanically break down and mix food inside the stomach cavity." },
+    { q: "What tough material lines a plant cell wall to provide structural support?", a: ["Glycogen matrices", "Chlorophyll pigments", "Cellulose fibers", "Protein mitochondria layers"], c: 2, exp: "Plant cell walls are made of cellulose, which provides a rigid structure that prevents the cell from bursting." },
+    { q: "Why are the cell groups lining the human small intestine highly folded into villi structures?", a: ["To reduce the rate of enzyme production", "To provide a massive surface area for rapid nutrient absorption", "To prevent water molecules from undergoing passive diffusion", "To protect the core layer from strong stomach acid"], c: 1, exp: "Folding the internal cell layer into villi dramatically increases the surface area, speeding up the absorption of soluble nutrients into the blood." },
+    { q: "Which biological life process is defined as the active elimination of toxic cellular metabolic waste?", a: ["Nutrition tracking", "Sensitivity reaction", "Excretion processing", "Growth enhancement"], c: 2, exp: "Excretion is the active removal of toxic waste products generated by chemical metabolic changes within an organism's cells." },
+    { q: "Why do green leaves look bright green when exposed to standard white light conditions?", a: ["Chlorophyll absorbs green wavelengths exclusively", "Chlorophyll reflects green light wavelengths while absorbing red and blue spectra", "The cell sap inside the permanent vacuole contains green dyes", "Iodine reactions take place naturally inside the leaf cells"], c: 1, exp: "Chlorophyll absorbs blue and red wavelengths to power photosynthesis, reflecting green light back to our eyes." },
+    { q: "What device is used to produce a magnified image of individual cell patterns using ambient light and an alignment of glass lenses?", a: ["A digital pH probe meter", "A light microscope unit", "An evaporating crystallization dish", "A mortar and pestle grinder"], c: 1, exp: "A light microscope relies on light paths and adjustable lenses to make tiny cell structures visible." },
+    { q: "Which structural parts are found inside plant cells but are completely absent from animal cells?", a: ["Nucleus, cytoplasm, and outer membranes", "Cell wall, chloroplast structures, and a central permanent vacuole", "Mitochondria networks and ribosome centers", "Glucose storage sections and water channels"], c: 1, exp: "Plant cells are distinguished from animal cells by having a rigid cellulose cell wall, chloroplasts, and a large permanent vacuole." },
+    { q: "What happens to the total mass of reactants during an irreversible chemical change inside a sealed container?", a: ["Mass increases as energy is released", "Mass decreases as gas forms", "Mass remains exactly the same due to conservation of mass", "Mass fluctuates depending on enzyme concentration"], c: 2, exp: "The Law of Conservation of Mass dictates that mass cannot be created or destroyed; the total mass remains constant." },
+    { q: "What type of salt product forms when a metal base reacts with sulfuric acid?", a: ["Metal chloride", "Metal sulfate", "Metal nitrate", "Metal carbonate"], c: 1, exp: "Sulfuric acid always produces metal sulfate salts during a neutralization or metal reaction." },
+    { q: "What is the function of the fine focusing wheel on a standard classroom microscope?", a: ["To adjust the amount of light entering from the mirror", "To swap between low and high power objective lenses", "To make small, precise adjustments for a sharp, clear image", "To secure the specimen slide firmly onto the stage"], c: 2, exp: "The fine focus wheel moves the stage in tiny increments to sharpen the image detail once it has been located." },
+    { q: "Which specialized cell type carries electrical signals rapidly across long distances in the body?", a: ["Muscle cell", "Red blood cell", "Nerve cell (neuron)", "Sperm cell"], c: 2, exp: "Nerve cells are adapted with long structures called axons, insulated by a myelin sheath, to transmit electrical impulses quickly." },
+    { q: "What carbohydrate molecule do plants use to store excess glucose made during photosynthesis?", a: ["Cellulose", "Chlorophyll", "Starch", "Protein"], c: 2, exp: "Glucose is soluble and chemically active, so plants convert it into insoluble starch for safe, long-term storage." },
+    { q: "Which life process involves an organism permanently increasing its physical size and mass?", a: ["Respiration", "Reproduction", "Growth", "Movement"], c: 2, exp: "Growth is the permanent increase in an organism's size and dry mass by building new cells." },
+    { q: "What is a tissue?", a: ["A single cell that can execute all life functions independently", "A group of similar specialized cells working together to perform a specific function", "An alignment of different organs managing blood filtration", "A chemical compound used to test for starch presence"], c: 1, exp: "A tissue is a collection of identical, specialized cells that cooperate to execute a shared task (e.g., muscle tissue)." },
+    { q: "What are the starting materials called at the beginning of a chemical reaction word equation?", a: ["Products", "Reactants", "Indicators", "Catalysts"], c: 1, exp: "Reactants are the initial substances positioned to the left of the transformation arrow in an equation." },
+    { q: "What term describes a reaction that absorbs heat energy from its surroundings, causing a drop in temperature?", a: ["Exothermic reaction", "Endothermic reaction", "Oxidation reaction", "Combustion reaction"], c: 1, exp: "Endothermic processes absorb thermal energy, making the immediate surroundings colder." },
+    { q: "Which specialized organelle acts as the main site where aerobic cellular respiration takes place?", a: ["The nucleus", "The chloroplast", "The mitochondrion", "The permanent vacuole"], c: 2, exp: "Mitochondria are the cellular powerhouses where oxygen and glucose combine to release energy." }
+];
+
+const writtenQuestions = [
+    // 5 Reasoning
+    { q: "Why is it biologically necessary for muscles to be arranged in antagonistic pairs across synovial joints to control skeleton movement?", type: "reason", exp: "Muscles can only perform work by contracting (shortening), which applies a pulling force on a bone. They cannot push or extend themselves back out actively. To move a bone back to its original position, a second opposing muscle must pull in the reverse direction. Therefore, antagonistic pairs (like biceps and triceps) are necessary to control movement across joints." },
+    { q: "Why do plants develop yellowed leaves and stunted growth patterns when grown in soils that lack nitrate ions?", type: "reason", exp: "Nitrates are a critical mineral requirement for healthy plant growth because they supply the nitrogen needed for protein synthesis and amino acid production. Without nitrates, a plant cannot build new proteins to grow cells, resulting in stunted growth. It also stops making enough chlorophyll, causing the green color to fade and leaves to turn yellow." },
+    { q: "Why must a scientist boil a green leaf in ethanol inside a hot water bath rather than heating it directly over an open Bunsen burner flame during a starch test?", type: "reason", exp: "Ethanol is highly flammable and catches fire easily. Heating a tube of ethanol directly over an open Bunsen burner flame poses a serious laboratory fire hazard. Using a hot water bath heats the ethanol safely without an open flame, keeping the extraction of chlorophyll safe." },
+    { q: "Why do prey species like rabbits have eyes on the sides of their heads, whereas predators like owls have eyes positioned on the front of their faces?", type: "reason", exp: "These eye placements are structural adaptations for survival. Prey species need eyes on the sides of their heads to provide a wide, peripheral field of view, helping them spot threats from almost any angle. Predators have forward-facing eyes to provide binocular vision and depth perception, which helps them accurately judge distances to catch prey." },
+    { q: "Why is the folding of the inner lining of the small intestine into villi critical for human digestive function?", type: "reason", exp: "The human body must absorb soluble nutrients from digested food into the bloodstream quickly. Folding the inner lining into millions of tiny finger-like projections called villi creates a massive surface area. This large surface area increases the rate of diffusion, ensuring nutrients are absorbed efficiently before waste moves on." },
+    // 5 Theory
+    { q: "Outline the sequential steps required to prepare a cheek cell sample on a slide and view it under a microscope.", type: "theory", exp: "Step 1: Gently swab the inside of the cheek using a clean cotton bud to collect cells. Step 2: Smear the bud onto the center of a clean glass slide. Step 3: Add a drop of stain (such as methylene blue) to make the cell structures visible. Step 4: Lower a thin glass coverslip gently over the sample at an angle to avoid trapping air bubbles. Step 5: Secure the slide onto the stage, select the lowest power objective lens, and focus using the adjustment wheels." },
+    { q: "Describe the differences in composition and transport direction between xylem and phloem vessels.", type: "theory", exp: "Xylem vessels are continuous, hollow tubes made of dead plant cells reinforced with lignin. They transport water and dissolved mineral ions in a single direction upwards from the roots to the stems and leaves. Phloem vessels are composed of living cells that transport dissolved sugars (sucrose) in both directions—upwards and downwards—from the leaves to growing tissues and storage organs." },
+    { q: "Explain how a guard cell pair controls the opening and closing of a stomata pore based on water availability.", type: "theory", exp: "Guard cells change shape based on their water levels. When water is plentiful, the guard cells absorb it, become turgid, and curve outward. This movement opens the stomata pore, allowing carbon dioxide to enter for photosynthesis. When water is scarce, the guard cells lose water, become flaccid, and straighten, closing the pore to prevent water loss." },
+    { q: "Detail the hierarchical organization of living organisms from cells to a whole organism, providing an example for each stage.", type: "theory", exp: "Hierarchy follows: 1) Cells (e.g., muscle cell). 2) Tissues: a group of similar cells working together (e.g., muscle tissue). 3) Organs: different tissues working together (e.g., the stomach). 4) Organ Systems: a group of organs cooperating (e.g., the digestive system). 5) Organism: all systems working together to form a living individual (e.g., a human)." },
+    { q: "Describe the specific roles of the cranium, ribs, and vertebrae within the human skeletal system.", type: "theory", exp: "The cranium forms a tough bone casing that protects the brain from impact. The ribs form a cage around the chest to protect vital organs like the heart and lungs, while expanding and contracting to assist breathing. The vertebrae form the spine, which protects the spinal cord, supports the upper body, and allows flexibility." }
+];
+
+const worksheetQuestions = [
+    { id: 1, text: "Worksheet Exercise A: A student places a plant into a dark cupboard for 48 hours and covers the center of Leaf A with black card. Leaf B is left completely uncovered. Draw the expected results for Leaf A after exposure to light and treatment with iodine. Type out the explanation for your shading model.", exp: " Shading Model: The outer exposed edges of Leaf A turn blue-black. The middle section that was covered by the card remains orange-brown. Explanation: The covered area could not absorb light, preventing photosynthesis and the production of starch. The uncovered edges absorbed light, photosynthesised successfully, and converted glucose into starch, turning iodine blue-black." },
+    { id: 2, text: "Worksheet Exercise B: A student collects the following data investigating pondweed photosynthesis at different distances from a lamp: 10cm = 20 bubbles/min, 20cm = 12 bubbles/min, 30cm = 7 bubbles/min, 40cm = 3 bubbles/min, 50cm = 0 bubbles/min. State the independent variable, dependent variable, and write a conclusion based on this pattern.", exp: "Independent Variable: Distance between the pondweed and the light source (cm). Dependent Variable: Number of oxygen bubbles produced per minute. Conclusion: As the distance from the light source increases, the rate of photosynthesis decreases because the light intensity drops." },
+    { id: 3, text: "Worksheet Exercise C: Label the missing states for a substance undergoing changes under extreme temperature. When gold is heated from room temperature past 1064°C, it transitions from a ____ to a ____. If 5g of solid gold is melted into this fluid form, what is the exact final mass of the pendant made? Explain using mass laws.", exp: "States: Transitions from a SOLID to a LIQUID. Final Mass: Exactly 5 grams. Explanation: The Law of Conservation of Mass states that mass cannot be created or destroyed during a physical change of state; the number of atoms remains identical." },
+    { id: 4, text: "Worksheet Exercise D: Match the specialized cells to their descriptions: [Red Blood Cell, Root Hair Cell, Sperm Cell, Palisade Cell]. Identify which cell has no nucleus to save space, and which cell has a large surface area extension to draw resources from soil gaps.", exp: "No Nucleus: The Red Blood Cell (adapted with a biconcave shape to carry maximum oxygen). Soil Extension: The Root Hair Cell (adapted with a long, thin projection to maximize water and mineral ion absorption from soil gaps)." },
+    { id: 5, text: "Worksheet Exercise E: Write the complete word equation for cellular respiration. Identify the cellular organelle where this process takes place.", exp: "Word Equation: Glucose + Oxygen -> Carbon Dioxide + Water (+ Energy). Organelle: The Mitochondrion (plural: mitochondria)." },
+    { id: 6, text: "Worksheet Exercise F: A student studies a slide using an eyepiece lens marked x10 and an objective lens marked x20. Calculate the total magnification. State which adjustment wheel should be turned first to move the stage into position safely.", exp: "Total Magnification: 200 (calculated as 10 x 20). Adjustment Wheel: The coarse focusing wheel should be adjusted first while watching from the side to avoid cracking the slide." },
+    { id: 7, text: "Worksheet Exercise G: State the complete balanced word equation for plant photosynthesis. Identify the source of energy that powers this process.", exp: "Word Equation: Carbon Dioxide + Water -> Glucose + Oxygen. Energy Source: Sunlight (light energy captured by chlorophyll inside chloroplast structures)." },
+    { id: 8, text: "Worksheet Exercise H: A group of cells are extracted from the lining of a human mouth. Identify whether this collection represents a cell, a tissue, an organ, or an organ system. Explain your classification.", exp: "Classification: A tissue. Explanation: It consists of a group of similar, specialized cells working together to form a protective lining layer." },
+    { q: "Worksheet Exercise I: Study the diagram of the human arm muscle layout. When the forearm is lowered away from the chest, identify which muscle contracts and which muscle relaxes.", exp: "Lowering Forearm: The triceps muscle contracts (shortens) to pull the lower arm bones down, while the biceps muscle relaxes (lengthens) to allow the arm to straighten." },
+    { id: 10, text: "Worksheet Exercise J: A plant is grown in soil that lacks magnesium. Describe the appearance of the leaves after two weeks and explain why this change happens using cell theory.", exp: "Appearance: The leaves turn yellow. Explanation: Magnesium is required to produce chlorophyll, the green pigment inside chloroplasts. Without magnesium, the plant cannot produce chlorophyll, causing it to lose its green color." }
+];
+
+// Populate MCQs
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Populate Written
+const writtenContainer = document.getElementById('written-container');
+writtenQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. [${data.type.toUpperCase()}] ${data.q}</div>
+        <textarea id="written-text-${index}" placeholder="Type your answer here..."></textarea>
+        <div class="explanation-box" id="written-exp-${index}">
+            <strong>Verified Scheme Guide:</strong><br>${data.exp}
+        </div>
+    `;
+    writtenContainer.appendChild(card);
+});
+
+// Populate Worksheet Layout Blocks
+const worksheetContainer = document.getElementById('worksheet-container');
+worksheetQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${data.text || data.q}</div>
+        <textarea id="work-text-${index}" placeholder="Write out your worksheet formatted solution..."></textarea>
+        <div class="explanation-box" id="work-exp-${index}">
+            <strong>Worksheet Answer Guide:</strong><br>${data.exp}
+        </div>
+    `;
+    worksheetContainer.appendChild(card);
+});
+
+function gradeQuiz3() {
+    let score = 0;
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+        expBox.style.display = 'block';
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Note:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Note:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Note:</strong> ${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<writtenQuestions.length; i++) {
+        document.getElementById(`written-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<worksheetQuestions.length; i++) {
+        document.getElementById(`work-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
