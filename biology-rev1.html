@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 Biology Revision 1</title>
+    <style>
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --success: #52b788;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #d8f3dc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f4f1;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 Biology Revision 1 (Core Systems)</h1>
+    <div class="intro">
+        <p><strong>Instructions:</strong> Answer the 20 multiple-choice questions followed by the structured written response templates. Click <strong>"Submit Assessment"</strong> at the base of the page to evaluate your score and view detailed explanatory notes.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Assessment Complete!</h2>
+        <div class="score-display" id="final-score">0 / 20</div>
+        <p>Your score is calculated! Review the correct structural models and explanations unlocked below.</p>
+    </div>
+
+    <form id="bio-form-1">
+        <div class="section-heading">Part 1: Multiple Choice Core Review</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Part 2: Specialized Diagram Application</div>
+        <div id="application-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz1()">Submit Assessment & Review Explanations</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    { q: "What carries dissolved glucose from the small intestine to other active parts of the human body?", a: ["The nervous system pathways", "The bloodstream", "The respiratory air sacs", "Xylem structural vessels"], c: 1, exp: "Glucose is absorbed into the bloodstream from the small intestine to be delivered for cellular respiration." },
+    { q: "Why do athletes take glucose tablets immediately before a high-energy race?", a: ["To repair broken bone segments", "To provide rapid energy via respiration", "To prevent long term disease", "To insulate organs from cold weather"], c: 1, exp: "Glucose combines with oxygen inside the mitochondria to instantly release energy via cellular respiration." },
+    { q: "Which organelle is universally found in both animal cells and plant cells?", a: ["Chloroplast", "Cell Wall", "Cell Membrane", "Permanent Vacuole"], c: 2, exp: "Both animal and plant cells possess a cell membrane and cytoplasm. Cell walls, vacuoles, and chloroplasts are unique to plant cells." },
+    { q: "What is the primary function of a red blood cell?", a: ["To trap micro-organisms and fight disease", "To carry signals around the body via long axons", "To transport oxygen using a large surface area and biconcave shape", "To produce digestive enzymes"], c: 2, exp: "Red blood cells are highly specialized with a biconcave shape and no nucleus to maximize oxygen transport." },
+    { q: "How do antagonistic muscle pairs operate to allow arm movement?", a: ["Both muscles contract at the exact same moment", "As one muscle contracts (shortens), the other relaxes (lengthens)", "Muscles actively push bones away from the torso", "Only one muscle exists in the upper arm section"], c: 1, exp: "Muscles can only pull; they cannot push. They must work in antagonistic pairs like the biceps and triceps." },
+    { q: "If a microscope has an eyepiece lens of x10 and an objective lens of x40, what is the total magnification?", a: ["x30", "x50", "x400", "x1040"], c: 2, exp: "Total magnification = Eyepiece lens x Objective lens. Therefore, 10 x 40 = 400." },
+    { q: "What is the correct word equation representing plant photosynthesis?", a: ["Glucose + Oxygen -> Carbon Dioxide + Water", "Carbon Dioxide + Water -> Glucose + Oxygen", "Metal + Acid -> Salt + Hydrogen gas", "Fuel + Oxygen -> Carbon Monoxide + Water"], c: 1, exp: "Photosynthesis uses light energy to transform carbon dioxide and water into glucose and oxygen." },
+    { q: "What is the function of the coarse focusing wheel on a light microscope?", a: ["To hold the glass slide firmly in place", "To reflect light through the specimen", "To bring the object into rapid, approximate focus", "To swap between different objective lenses"], c: 2, exp: "The coarse focus adjustments move the stage rapidly to find the specimen image profile." },
+    { q: "Which specialised plant cell is adapted with a long, thin projection to maximize water absorption?", a: ["Palisade cell", "Root hair cell", "Xylem vessel", "Phloem cell"], c: 1, exp: "Root hair cells feature an extended surface area and thin walls to absorb water and minerals from soil gaps." },
+    { q: "What structural level follows tissues inside the hierarchical organization of living organisms?", a: ["Cells", "Organs", "Organ Systems", "Whole Organisms"], c: 1, exp: "The structural hierarchy follows the sequence: Cells -> Tissues -> Organs -> Organ Systems -> Organisms." },
+    { q: "Which subatomic particle has a relative atomic weight of 1 and a charge of +1?", a: ["Electron", "Neutron", "Proton", "Nucleus"], c: 2, exp: "Protons carry a positive charge and have an atomic weight mass of 1." },
+    { q: "What happens to the rate of bubbling during a pondweed experiment if the light source is moved further away?", a: ["The rate of bubbling increases", "The rate of bubbling decreases", "The rate stays exactly identical", "The pondweed turns into a consumer"], c: 1, exp: "Moving the light further away decreases light intensity, which slows the rate of photosynthesis and drops bubble counts." },
+    { q: "What pigment is found inside chloroplasts that actively absorbs sunlight for plant nutrition?", a: ["Iodine", "Chlorophyll", "Ethanol", "Cellulose sap"], c: 1, exp: "Chlorophyll is the green pigment inside chloroplast structures that traps light energy." },
+    { q: "Which human organ system is responsible for breaking down food substances and absorbing nutrients?", a: ["Respiratory system", "Skeletal system", "Digestive system", "Nervous system"], c: 2, exp: "The digestive system breaks down large molecules into soluble nutrients like glucose." },
+    { q: "What bone structure provides physical protection for the human brain?", a: ["The ribs", "The cranium (skull)", "The femur", "The vertebrae"], c: 1, exp: "The cranium is the skeletal casing designed specifically to protect the brain." },
+    { q: "What term describes the process where particles move from an area of high concentration to an area of low concentration?", a: ["Mitosis", "Diffusion", "Photosynthesis", "Excretion"], c: 1, exp: "Diffusion is the passive net movement of particles down a concentration gradient." },
+    { q: "Which of the following is defined as a life process involving removing cellular waste products?", a: ["Nutrition", "Sensitivity", "Excretion", "Reproduction"], c: 2, exp: "Excretion removes toxic metabolic waste materials from living cells." },
+    { q: "What do muscle cells inside the wall of the human intestine do to assist digestion?", a: ["They produce amylase enzymes", "They contract to move food through the digestive tract", "They absorb oxygen directly from food", "They transform sugar into starch"], c: 1, exp: "Intestinal muscle layers contract rhythmically to push food along the tract." },
+    { q: "What structural adaptation allows palisade mesophyll cells to carry out high levels of photosynthesis?", a: ["They are dead cells forming hollow tubes", "They are packed with a high number of chloroplasts", "They have long hair-like roots", "They lack a central nucleus"], c: 1, exp: "Palisade cells are tall, thin, and packed with chloroplasts to catch maximum sunlight near the leaf surface." },
+    { q: "Why is cell division (mitosis) essential inside a multicellular organism?", a: ["To decrease the overall mass of organs", "For growth, tissue repair, and reproduction", "To transform water into mineral ions", "To alter the chemical structure of enzymes"], c: 1, exp: "Mitosis allows organisms to grow, replace damaged cell groups, and assist reproduction traits." }
+];
+
+const appQuestions = [
+    { q: "Detail the construction of an atom by tracking the specific masses, electrical charges, and locations of protons, neutrons, and electrons.", exp: "Based on the atomic structure data: 1) Protons have a mass of 1, a charge of +1, and reside in the central nucleus. 2) Neutrons have a mass of 1, a charge of 0, and reside inside the nucleus. 3) Electrons have a mass of 0 and a charge of -1, and orbit outside the nucleus in shells." },
+    { q: "Explain the sequential steps involved when an animal cell undergoes cell division (mitosis).", exp: "Mitosis progresses in a three-step sequence: 1) The genetic material inside the cell makes an exact copy of itself. 2) The nucleus of the cell divides into two separate, identical nuclei. 3) The cell membrane pinches and divides down the middle to form two separate, identical daughter cells." },
+    { q: "Describe the antagonistic muscle actions that occur in the human arm when raising the forearm.", exp: "Muscles can only pull and cannot push, so they operate in pairs. When raising the forearm, the biceps muscle contracts (shortens) to pull the lower arm bones upward, while the opposing triceps muscle relaxes (lengthens) to allow the joint movement." }
+];
+
+// Populate MCQ elements
+const container = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    container.appendChild(card);
+});
+
+// Populate Application elements
+const appContainer = document.getElementById('application-container');
+appQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <textarea id="app-text-${index}" placeholder="Type your biological explanation here..."></textarea>
+        <div class="explanation-box" id="app-exp-${index}">
+            <strong>Verified Mark Scheme Answer:</strong><br>${data.exp}
+        </div>
+    `;
+    appContainer.appendChild(card);
+});
+
+function gradeQuiz1() {
+    let score = 0;
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+        expBox.style.display = 'block';
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br>${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br>${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br>${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<appQuestions.length; i++) {
+        document.getElementById(`app-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
