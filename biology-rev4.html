@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 Biology Revision 4</title>
+    <style>
+        :root {
+            --primary: #0077b6;
+            --primary-dark: #03045e;
+            --success: #00b4d8;
+            --danger: #ba181b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #caf0f877;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f5fa;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: #02033b;
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 Biology Revision - Part 4</h1>
+    <div class="intro">
+        <p><strong>Section Guidelines:</strong> Complete the 30 multiple-choice questions focusing on gestation development milestones, plant propagation, and food webs. Then attempt the application questions based on your provided worksheet layouts. Click <strong>"Submit Assessment"</strong> to unlock solutions.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Marking Summary</h2>
+        <div class="score-display" id="final-score">0 / 30</div>
+        <p>Scroll down to check explanations and structural criteria.</p>
+    </div>
+
+    <form id="bio-form-4">
+        <div class="section-heading">Sub-Section A: Advanced Multiple Choice Base (31 - 60)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Sub-Section B: Reasoning &amp; Theory Analysis</div>
+        <div id="written-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Sub-Section C: Worksheet Formatting Application Questions</div>
+        <div id="worksheet-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeQuiz4()">Submit Assessment &amp; Reveal Keys</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    { q: "At what week of human pregnancy are all major organs formed, with the fetus measuring about 75mm long?", a: ["Week 4", "Week 12", "Week 24", "Week 37"], c: 1, exp: "Your gestation development organizer states that all organs are formed by Week 12." },
+    { q: "What milestone occurs during Week 24 of human fetal development?", a: ["The zygote undergoes its first cell division", "The fetus grows hair and can open its eyes", "The baby rotates head-downwards for birth", "The placenta network disconnects"], c: 1, exp: "By Week 24, the fetus develops hair and can open its eyes, with a high chance of survival if born prematurely." },
+    { q: "What key change occurs during Weeks 37–40 of pregnancy?", a: ["The embryo forms its first tissues", "The fetus reaches full term and rotates head-downwards", "The heart beats for the first time", "The fluid-filled amniotic sac dissolves completely"], c: 1, exp: "During weeks 37-40, the fully developed baby (~520mm) rotates into a head-down position for birth." },
+    { q: "What developmental condition can be caused by heavy alcohol consumption during pregnancy?", a: ["Concupiscence Syndrome", "Foetal Alcohol Syndrome (FAS)", "Bioaccumulation toxicity", "Synovial joint friction"], c: 1, exp: "Heavy drinking allows alcohol to cross the placenta, which can cause Foetal Alcohol Syndrome, leading to learning difficulties." },
+    { q: "What stalk-like structure supports and holds up a flower's pollen-producing anther?", a: ["The sepal", "The filament", "The style", "The stigma"], c: 1, exp: "The filament is the supporting stalk of the stamen that holds up the anther." },
+    { q: "What is the function of green sepals on a flower?", a: ["To attract insects with nectar rewards", "To protect the young flower bud before it opens", "To capture loose pollen grains from air currents", "To house female ovules"], c: 1, exp: "Sepals protect the delicate inner flower organs while it is still a closed bud." },
+    { q: "What is a piece of a plant stem or root that is cut away and grown to form a new plant called?", a: ["A runner clone", "A cutting", "A chloroplast node", "A germinated seedling"], c: 1, exp: "A cutting is a section of a plant used in artificial asexual reproduction to grow an identical clone." },
+    { q: "What are horizontal side branches with small plantlets on them used for asexual reproduction called?", a: ["Filaments", "Runners", "Sepals", "Stomata"], c: 1, exp: "Runners (like those on strawberry plants) grow along the ground to produce new plants asexually." },
+    { q: "What does the term 'gestation' mean in human reproductive biology?", a: ["The moment when gamete nuclei fuse", "The period of time a baby develops inside the uterus from conception to birth", "The physical changes that happen during puberty", "The monthly breakdown of the uterus lining"], c: 1, exp: "Gestation is the scientific term for the pregnancy period, which lasts about 40 weeks in humans." },
+    { q: "What is an embryo?", a: ["An unfertilized egg cell inside an ovary", "An unborn offspring in the early stages of development (up to 8 weeks)", "A fully developed fetus ready for birth", "A seed sprout during its dormant phase"], c: 1, exp: "An embryo describes the early stages of a developing organism from fertilization until the end of the 8th week." },
+    { q: "Which female hormone is responsible for thickening the lining of the uterus?", a: ["Testosterone", "Oestrogen", "Amylase", "Methylene Blue"], c: 1, exp: "Oestrogen, produced by the ovaries, stimulates the thickening of the uterus lining during the menstrual cycle." },
+    { q: "What term describes the period when a person reaches sexual maturity and undergoes physical changes?", a: ["Gestation", "Puberty", "Implantation", "Ovulation"], c: 1, exp: "Puberty is the stage of development when hormonal changes lead to sexual maturity." },
+    { q: "What connects a developing fetus directly to the placenta organ?", a: ["The fallopian tube", "The umbilical cord", "The amniotic sac", "The synovial joint fluid"], c: 1, exp: "The umbilical cord links the fetus to the placenta to transport oxygen and nutrients and remove waste." },
+    { q: "What is an omnivore?", a: ["An organism that makes its own food using sunlight", "An animal that eats both plants and other animals", "A top predator that only eats meat", "A plant that absorbs minerals from soil gaps"], c: 1, exp: "Omnivores are consumers that eat a mixed diet of both plant and animal material." },
+    { q: "What do we call the first consumer that eats a producer in a food chain?", a: ["Secondary consumer", "Primary consumer", "Tertiary consumer", "Apex predator"], c: 1, exp: "The primary consumer (herbivore) feeds directly on the producer at the start of a food chain." },
+    { q: "What happens during the 'germination' stage of a plant's life cycle?", a: ["Pollen lands on the sticky stigma pad", "The growth of a plant from a seed after a period of dormancy", "The fusion of male and female sex cells", "Cutting a stem to grow roots"], c: 1, exp: "Germination is the process where a seed sprouts and begins growing into a plant when conditions are favorable." },
+    { q: "Which of the following describes an animal that only eats other animals?", a: ["Herbivore", "Carnivore", "Omnivore", "Producer"], c: 1, exp: "Carnivores are specialized consumers that feed exclusively on the meat of other animals." },
+    { q: "What is an organism's 'distribution' within a habitat?", a: ["The total amount of toxins it accumulates", "Where that certain organism can be found within the habitat", "The rate at which it reproduces", "The number of parent cells it inherits traits from"], c: 1, exp: "Distribution describes the locations across a habitat where a particular species is found." },
+    { q: "What is the main difference between sexual and asexual reproduction?", a: ["Asexual offspring are always larger", "Asexual reproduction produces genetically identical clones, while sexual reproduction creates variation", "Sexual reproduction only occurs in plants", "Asexual processes require two parent cells to fuse"], c: 1, exp: "Asexual reproduction involves one parent and produces identical clones; sexual reproduction combines two parents, creating genetic variation." },
+    { q: "What happens to the concentration of toxins in organisms at higher trophic levels in a food chain?", a: ["The concentration of toxins decreases", "The concentration of toxins increases due to bioaccumulation", "The toxins disappear entirely at the top level", "The toxins turn into helpful mineral nutrients"], c: 1, exp: "Bioaccumulation causes toxins to build up in higher concentrations at each step up the food chain, affecting top predators the most." },
+    { q: "Which vertical columns on the periodic table contain elements with similar properties?", a: ["Periods", "Groups", "Rows", "Mixtures"], c: 1, exp: "Vertical columns on the periodic table are called groups; elements within the same group share similar chemical behaviors." },
+    { q: "What toxic gas can be produced during incomplete combustion when oxygen is limited?", a: ["Carbon dioxide", "Carbon monoxide", "Hydrogen gas", "Sulfur dioxide"], c: 1, exp: "Incomplete combustion occurs when oxygen is low, producing toxic, odorless carbon monoxide gas." },
+    { q: "Where does chemical digestion begin in the human body?", a: ["In the stomach", "In the mouth", "In the small intestine", "In the esophagus tube"], c: 1, exp: "Digestion starts in the mouth, where salivary enzymes begin breaking down nutrients mechanically and chemically." },
+    { q: "What type of reproductive cell is produced by the male testes?", a: ["Egg cell", "Sperm cell", "Zygote", "Embryo"], c: 1, exp: "The testes produce male gametes, which are specialized sperm cells." },
+    { q: "What are the physical surroundings and conditions of an organism called?", a: ["Habitat", "Environment", "Trophic level", "Distribution area"], c: 1, exp: "An organism's immediate surroundings and physical factors make up its environment." },
+    { q: "Which kingdom of life includes mushrooms and yeasts?", a: ["Plants", "Animals", "Fungi", "Bacteria"], c: 2, exp: "Mushrooms, molds, and yeasts belong to the Fungi kingdom, as they absorb nutrients rather than making their own food." },
+    { q: "What process describes an embryo attaching itself to the lining of the uterus?", a: ["Fertilisation", "Implantation", "Gestation", "Ovulation"], c: 1, exp: "Implantation is the process where the developing embryo embeds itself into the thickened uterus lining." },
+    { q: "Which type of plant reproduction requires insects or wind to transfer pollen grains?", a: ["Asexual reproduction", "Cuttings propagation", "Sexual reproduction", "Runners cloning"], c: 2, exp: "Pollination is a key stage of sexual reproduction in flowering plants, combining male and female gametes to create variation." },
+    { q: "What term describes two or more different organisms relying on each other for survival in a habitat?", a: ["Bioaccumulation", "Interdependence", "Distribution", "Classification"], c: 1, exp: "Interdependence describes how species rely on each other for food, shelter, or pollination within an ecosystem." },
+    { q: "What happens to a fuel when it burns completely in a plentiful supply of oxygen?", a: ["It undergoes incomplete combustion, producing soot", "It undergoes complete combustion, producing carbon dioxide and water", "It undergoes an endothermic physical state change", "It produces carbon monoxide and hydrogen gas"], c: 1, exp: "Complete combustion occurs in abundant oxygen, converting hydrocarbon fuels into carbon dioxide and water vapor." }
+];
+
+const writtenQuestions = [
+    // 5 Reasoning
+    { q: "Why can drinking alcohol heavily during pregnancy lead to learning difficulties and behavioral problems in a child?", type: "reason", exp: "Alcohol consumed by a pregnant woman passes across the placenta barrier directly into the fetal bloodstream via the umbilical cord. Because the fetus's organs are still developing, exposure to alcohol can disrupt brain cell development, leading to Foetal Alcohol Syndrome (FAS), which causes long-term learning difficulties and behavioral problems." },
+    { q: "Why do plants grown from cuttings look exactly like the parent plant, whereas plants grown from seeds show variations?", type: "reason", exp: "Cuttings are a form of asexual reproduction, which involves only one parent and relies on mitosis. This results in offspring that are genetically identical clones of the parent plant. Seeds are produced through sexual reproduction, which combines genetic material from two parents during fertilization, creating genetic variation." },
+    { q: "Why does the population of primary consumers often crash if top predators are completely removed from a closed forest ecosystem?", type: "reason", exp: "When top predators are removed, the pressure on primary consumers disappears, causing their population to explode initially. This leads to overgrazing, where the primary consumers eat the producers (plants) faster than they can grow back. The resulting food shortage causes the primary consumer population to crash from starvation." },
+    { q: "Why is the umbilical cord necessary to support a fetus during its 40-week gestation timeline?", type: "reason", exp: "The fetus develops inside a fluid-filled amniotic sac and cannot breathe air or eat food directly. The umbilical cord contains blood vessels that connect the fetus to the placenta. This connection allows the fetus to receive oxygen and nutrients like glucose from the mother's blood, while safely removing carbon dioxide and urea waste." },
+    { q: "Why does incomplete combustion of household gas fuels present a serious safety hazard compared to complete combustion?", type: "reason", exp: "Complete combustion takes place in a plentiful supply of oxygen, producing harmless carbon dioxide and water vapor. Incomplete combustion occurs when oxygen is limited, producing carbon monoxide—a highly toxic, odorless gas that can be fatal if inhaled—or soot particles, which can cause respiratory problems." },
+    // 5 Theory
+    { q: "Outline the milestone developments that occur inside a human uterus at Week 12, Week 24, and Week 37 of gestation.", type: "theory", exp: "By Week 12, all major organs are formed, and the embryo is now classified as a fetus measuring roughly 75mm long. By Week 24, the fetus develops hair, can open its eyes, and has a high chance of survival if born prematurely. By Week 37, the fetus is fully developed (~520mm), reaching full term, and rotates into a head-down position ready for birth." },
+    { q: "Describe how you would propagate a new plant clone using the laboratory method of taking a stem cutting.", type: "theory", exp: "Step 1: Select a healthy parent plant and use sharp scissors to cut a section of the stem containing a node. Step 2: Strip the lower leaves away from the cutting to minimize water loss. Step 3: Place the cut end into moist compost or water under favorable conditions of light and temperature. Step 4: Wait for the cutting to develop roots and shoots, forming an independent clone of the parent plant." },
+    { q: "Explain the process of bioaccumulation and describe why it affects apex predators more severely than primary consumers.", type: "theory", exp: "Bioaccumulation is the build-up of persistent toxins within a food chain. Producers absorb low levels of toxins from the environment. Primary consumers eat many producers, accumulating the toxins in higher concentrations in their tissues. This concentration increases at each step up the food chain, meaning apex predators ingest the highest, most toxic levels because they consume many lower-level animals." },
+    { q: "Describe the structural components and functions of the female reproductive parts of a flower.", type: "theory", exp: "The female part of a flower is the carpel, which consists of four structures: 1) The Stigma: a sticky landing pad at the top that catches pollen grains. 2) The Style: a tube connecting the stigma to the ovary that pollen travels down. 3) The Ovary: a swollen base section that protects the reproductive structures. 4) The Ovules: structures inside the ovary that contain female gametes and develop into seeds after fertilization." },
+    { q: "Outline the properties of the five kingdoms of life, providing an example of an organism belonging to each.", type: "theory", exp: "The five kingdoms are: 1) Animals: multicellular organisms that ingest food (e.g., human). 2) Plants: multicellular organisms that make food via photosynthesis (e.g., palisade cell leaf). 3) Fungi: organisms that absorb nutrients from organic matter (e.g., mushroom). 4) Protists: mainly microscopic, single-celled organisms (e.g., amoeba). 5) Bacteria: microscopic single-celled organisms without a true nucleus." }
+];
+
+const worksheetQuestions = [
+    { id: 11, text: "Worksheet Exercise K: Look at the diagram of the female reproductive tract. Label the parts which match: 1) The tube channel where an egg cell moves after ovulation, 2) The central chamber where an embryo implants to grow during gestation. Type your answer definitions.", exp: "Tube Channel: The oviduct (or Fallopian tube), which connects the ovary to the uterus. Central Chamber: The uterus (or womb), where the lining thickens to support embryo development throughout pregnancy." },
+    { id: 12, text: "Worksheet Exercise L: State the week milestone when a human fetus is considered fully developed, measures roughly 520mm long, and rotates head-downwards. Identify what risk factor crosses the placenta if the mother consumes alcohol heavily during this window.", exp: "Week Milestone: Weeks 37-40 (Full Term). Risk Factor: Alcohol crosses the placenta, which can cause Foetal Alcohol Syndrome (FAS), leading to learning difficulties and behavioral problems." },
+    { id: 13, text: "Worksheet Exercise M: A strawberry plant produces horizontal side branches with tiny plantlets on them to grow new independent clones. State the name of this reproductive adaptation and identify whether it is an example of sexual or asexual reproduction.", exp: "Reproductive Adaptation: Runners. Type of Reproduction: Asexual reproduction (involving one parent, producing genetically identical clones)." },
+    { id: 14, text: "Worksheet Exercise N: Match the missing terms for a combustion reaction word equation: Fuel + Oxygen -> ________ + Water. State which substance is produced instead if the reaction takes place with insufficient oxygen.", exp: "Abundant Oxygen Product: Carbon dioxide. Insufficient Oxygen Alternative: Carbon monoxide (a highly toxic gas) or carbon particles (appearing as soot)." },
+    { id: 15, text: "Worksheet Exercise O: Review the diagram of a food web. If an environmental toxin enters the habitat and is absorbed by the producers, state which trophic level will show the highest concentration of the poison. Name this ecological process.", exp: "Highest Concentration Level: The top trophic level (Apex Predator / Top Carnivore). Ecological Process: Bioaccumulation (the build-up of toxins as energy moves up a food chain)." },
+    { id: 16, text: "Worksheet Exercise P: List the names of the parts that protect a flower before it opens, and the stalk that holds up the pollen-producing anther.", exp: "Flower Protection: Sepals (leaf-like structures that are often green). Supporting Stalk: The filament (the stalk part of the stamen that holds up the anther)." },
+    { id: 17, text: "Worksheet Exercise Q: A student tests a leaf for starch. Number the steps in the correct order: [ ] Place the leaf in a tube of ethanol inside hot water to strip chlorophyll, [ ] Add drops of iodine to check for a color change, [ ] Boil the leaf in water for two minutes to soften it.", exp: "Correct Step Order: 1) Boil the leaf in water to soften it, 2) Place the leaf in ethanol inside hot water to remove chlorophyll, 3) Add drops of iodine to check for starch (turning blue-black)." },
+    { id: 18, text: "Worksheet Exercise R: A plant develops yellow leaves with dead spots and poor flower yields. Identify which mineral ion is missing from the soil matrix. Contrast this with the symptom of a magnesium deficiency.", exp: "Missing Mineral: Potassium (essential for healthy leaves and flowers). Contrast: A magnesium deficiency prevents the plant from making chlorophyll, causing the leaves to turn a uniform yellow color without dead spots." },
+    { id: 19, text: "Worksheet Exercise S: Identify the classification kingdom that contains microscopic, single-celled organisms that do not have a nucleus. Give an example of an organism in this kingdom.", exp: "Classification Kingdom: Bacteria (or Prokaryotes). Example: Standard bacterial cells found in nature." },
+    { id: 20, text: "Worksheet Exercise T: A student measures a skull and notes that the eye sockets are positioned on the side of the head, and it features teeth adapted for grinding plants. Identify whether this animal was a predator or prey species. List one physical adaptation it might have for protection.", exp: "Animal Classification: Prey species (eyes on the sides of the head provide a wide field of view to watch for danger). Protection Adaptation: Horns, spikes, or camouflage features to avoid being eaten." }
+];
+
+// Populate MCQs
+const mcContainer = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 31}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    mcContainer.appendChild(card);
+});
+
+// Populate Written
+const writtenContainer = document.getElementById('written-container');
+writtenQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${index + 6}. [${data.type.toUpperCase()}] ${data.q}</div>
+        <textarea id="written-text-${index}" placeholder="Type your answer here..."></textarea>
+        <div class="explanation-box" id="written-exp-${index}">
+            <strong>Verified Scheme Guide:</strong><br>${data.exp}
+        </div>
+    `;
+    writtenContainer.appendChild(card);
+});
+
+// Populate Worksheet Layout Blocks
+const worksheetContainer = document.getElementById('worksheet-container');
+worksheetQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${data.text || data.q}</div>
+        <textarea id="work-text-${index}" placeholder="Write out your worksheet formatted solution..."></textarea>
+        <div class="explanation-box" id="work-exp-${index}">
+            <strong>Worksheet Answer Guide:</strong><br>${data.exp}
+        </div>
+    `;
+    worksheetContainer.appendChild(card);
+});
+
+function gradeQuiz4() {
+    let score = 0;
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+        expBox.style.display = 'block';
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br><strong>Note:</strong> ${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br><strong>Note:</strong> ${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br><strong>Note:</strong> ${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<writtenQuestions.length; i++) {
+        document.getElementById(`written-exp-${i}`).style.display = 'block';
+    }
+    for(let i=0; i<worksheetQuestions.length; i++) {
+        document.getElementById(`work-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
