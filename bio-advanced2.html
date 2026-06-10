@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 7 Biology Advanced Revision 2</title>
+    <style>
+        :root {
+            --primary: #0077b6;
+            --primary-dark: #03045e;
+            --success: #00b4d8;
+            --danger: #e71d36;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --theory-bg: #caf0f8;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f5fa;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .section-heading {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+        }
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 40px;
+        }
+        .submit-btn:hover {
+            background-color: #02033b;
+        }
+        #results-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            background-color: var(--theory-bg);
+            border-left: 4px solid var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Year 7 Biology Revision (Omitted Details - Part 2)</h1>
+    <div class="intro">
+        <p><strong>Advanced Focus:</strong> This test covers the specific gestation timelines, fetal risks, and artificial plant cloning methods. Answer the 20 multiple-choice questions followed by the written applications to check your understanding.</p>
+    </div>
+
+    <div id="results-box">
+        <h2>Assessment Complete!</h2>
+        <div class="score-display" id="final-score">0 / 20</div>
+        <p>Review the detailed explanations below to grade your progress.</p>
+    </div>
+
+    <form id="bio-advanced-2">
+        <div class="section-heading">Multiple Choice Reproduction & Ecosystems (1 - 20)</div>
+        <div id="mc-container" style="margin-top: 20px;"></div>
+
+        <div class="section-heading">Reproductive & Ecological Written Analysis</div>
+        <div id="application-container" style="margin-top: 20px;"></div>
+
+        <button type="button" class="submit-btn" onclick="gradeAdvancedQuiz2()">Submit Advanced Test</button>
+    </form>
+</div>
+
+<script>
+const mcQuestions = [
+    { q: "At what week of human gestation are all major organs formed, with the fetus measuring about 75mm long?", a: ["Week 4", "Week 12", "Week 24", "Week 37"], c: 1, exp: "Your reproduction organizer confirms that by Week 12, all major organs are formed." },
+    { q: "What milestone occurs during Week 24 of human fetal development?", a: ["The heart starts beating for the first time", "The fetus grows hair and can open its eyes", "The baby rotates head-downwards to get ready for birth", "The zygote implants into the uterus lining"], c: 1, exp: "At Week 24, the fetus develops hair and can open its eyes, with a high chance of survival if born now." },
+    { q: "What change happens to a fully developed fetus during Weeks 37–40 of pregnancy?", a: ["It forms its very first bone segments", "It rotates so its head points downwards, ready to be born", "It drops its total mass to save energy", "It develops its placenta network"], c: 1, exp: "During weeks 37-40, the baby reaches full term (~520mm) and rotates head-downwards for birth." },
+    { q: "What condition can be caused by heavy alcohol consumption during pregnancy, resulting in learning difficulties?", a: ["Concupiscence Syndrome", "Foetal Alcohol Syndrome (FAS)", "Bioaccumulation toxicity", "Synovial joint friction"], c: 1, exp: "Heavy drinking during pregnancy can cross the placenta and lead to Foetal Alcohol Syndrome, causing learning difficulties." },
+    { q: "What part of a flower supports and holds up the pollen-producing anther?", a: ["The sepal", "The filament", "The style", "The stigma"], c: 1, exp: "The filament is the stalk-like structure that holds up the anther." },
+    { q: "What is the role of the green sepals on a flower?", a: ["To attract insects with a sweet scent", "To protect the young flower bud before it opens", "To store female egg cell gametes", "To drop pollen grains on air currents"], c: 1, exp: "Sepals are leaf-like structures that protect the flower when it is still a closed bud." },
+    { q: "What is a piece of a plant that is cut away and grown in good conditions to form a new plant called?", a: ["A runner clone", "A cutting", "A continuous xylem tube", "A germinated ovule"], c: 1, exp: "Cuttings are pieces of a plant used in artificial asexual reproduction to grow a clone of the parent plant." },
+    { q: "What term describes horizontal side branches with small plantlets on them used for asexual reproduction?", a: ["Filaments", "Runners", "Sepals", "Stomata"], c: 1, exp: "Runners are horizontal stems that grow along the ground, allowing plants to reproduce asexually." },
+    { q: "What does the term 'gestation' mean in human biology?", a: ["The moment when a sperm cell fuses with an egg", "The period of time a baby develops inside the uterus from conception to birth", "The physical changes that happen during puberty", "The monthly breakdown of the womb lining"], c: 1, exp: "Gestation is the scientific name for the pregnancy timeline (about 40 weeks in humans)." },
+    { q: "What is an embryo?", a: ["An unfertilized egg cell inside an ovary", "An unborn offspring in the early stages of development (up to 8 weeks)", "A fully developed fetus ready for birth", "A plant seed during its dormant phase"], c: 1, exp: "In humans, the developing organism is called an embryo from conception until the end of the 8th week." },
+    { q: "What reproductive hormone is produced by the ovaries to help thicken the uterus lining?", a: ["Testosterone", "Oestrogen", "Chlorophyll sap", "Insulin"], c: 1, exp: "Oestrogen is the primary female reproductive hormone responsible for thickening the uterus lining." },
+    { q: "What term describes the stage of development when a person becomes sexually mature during their teenage years?", a: ["Gestation", "Puberty", "Implantation", "Ovulation"], c: 1, exp: "Puberty is the period when hormonal changes cause physical changes and sexual maturity." },
+    { q: "What connects the developing fetus directly to the placenta organ?", a: ["The fallopian tube", "The umbilical cord", "The amniotic sac", "The synovial joint fluid"], c: 1, exp: "The umbilical cord links the fetus to the placenta to exchange nutrients, oxygen, and waste." },
+    { q: "What is the definition of an omnivore in an ecosystem?", a: ["An organism that produces its own food using sunlight", "An animal that eats both plants and other animals", "A predator that only consumes apex species", "A consumer that extracts minerals from soil gaps"], c: 1, exp: "Omnivores eat a mixed diet of both plant material and animal meat." },
+    { q: "What do we call the first consumer that eats the producer in a food chain?", a: ["Secondary consumer", "Primary consumer", "Tertiary consumer", "Apex predator"], c: 1, exp: "The organism that feeds directly on producers is called the primary consumer (or herbivore)." },
+    { q: "What happens during the 'germination' stage of a plant's life cycle?", a: ["Pollen grains land on the sticky stigma pad", "The growth of a plant from a seed after a period of dormancy", "The fusion of male and female sex cells", "The cutting of a stem to grow roots"], c: 1, exp: "Germination is the process where a seed begins to sprout and grow into a new plant." },
+    { q: "Which of the following is an example of a consumer that only eats other animals?", a: ["Herbivore", "Carnivore", "Omnivore", "Producer"], c: 1, exp: "Carnivores are meat-eating consumers that only feed on other animals." },
+    { q: "What is an organism's 'distribution' within a habitat?", a: ["The total amount of toxic material it accumulates", "Where that certain organism can be found within the habitat", "The rate at which it carries out reproduction", "The number of parent cells it inherits traits from"], c: 1, exp: "Distribution describes the spatial layout of where a species lives across an ecosystem area." ? },
+    { q: "What is the main difference between sexual and asexual reproduction outcomes?", a: ["Asexual offspring are always larger", "Asexual reproduction produces genetically identical clones, while sexual reproduction creates variation", "Sexual reproduction only occurs inside plant structures", "Asexual processes require two different gamete cells"], c: 1, exp: "Asexual reproduction uses one parent to make identical clones; sexual reproduction combines two parents, creating genetic variation." },
+    { q: "What happens to the level of toxins in the bodies of organisms as you move higher up a food chain?", a: ["The concentration of toxins decreases", "The concentration of toxins increases (bioaccumulation)", "The toxins vanish entirely at the top tier", "The toxins transform into helpful mineral nutrients"], c: 1, exp: "Due to bioaccumulation, toxins build up in higher concentrations at each trophic level, hitting the top predators the hardest." }
+];
+
+const appQuestions = [
+    { q: "Explain how nutrients and gases are exchanged between a mother and her developing fetus, and why certain lifestyle choices pose a risk.", exp: "Oxygen and nutrients like glucose pass from the mother's blood into the fetal blood across the placenta, which is linked to the fetus by the umbilical cord. Harmful substances like alcohol and nicotine can also cross this barrier. Smoking reduces oxygen delivery, which can cause premature birth or low birthweight, while drinking heavily can cause Foetal Alcohol Syndrome, leading to learning difficulties." },
+    { q: "Describe the differences between natural and artificial asexual reproduction in plants, providing an example of each.", exp: "Natural asexual reproduction happens without human help; for example, strawberry plants grow horizontal stems called 'runners' that produce new plantlets along the ground. Artificial asexual reproduction is done by humans; for example, taking a 'cutting' involves snipping a piece of a stem and placing it in good conditions so it grows roots and shoots to form a new plant clone." },
+    { q: "Explain what happens to an ecosystem's food web if an apex predator is completely removed from the habitat.", exp: "Removing the apex predator disrupts the balance of the food web because it removes the threat to the animals it hunts. Without predators, the populations of secondary and primary consumers will initially grow rapidly. This sudden increase can lead to overgrazing on the producers (plants), which can cause food shortages and disrupt the entire ecosystem." }
+];
+
+// Populate MCQ elements
+const container = document.getElementById('mc-container');
+mcQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    let optionsHTML = '';
+    data.a.forEach((option, oIdx) => {
+        optionsHTML += `
+            <li class="option-item">
+                <label class="option-label" id="mc-label-${index}-${oIdx}">
+                    <input type="radio" name="mc-${index}" value="${oIdx}">
+                    ${option}
+                </label>
+            </li>
+        `;
+    });
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <ul class="options-list">${optionsHTML}</ul>
+        <div class="explanation-box" id="mc-exp-${index}"></div>
+    `;
+    container.appendChild(card);
+});
+
+// Populate Application elements
+const appContainer = document.getElementById('application-container');
+appQuestions.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-text">${index + 1}. ${data.q}</div>
+        <textarea id="app-text-${index}" placeholder="Type your answer here..."></textarea>
+        <div class="explanation-box" id="app-exp-${index}">
+            <strong>Model Scheme Key:</strong><br>${data.exp}
+        </div>
+    `;
+    appContainer.appendChild(card);
+});
+
+function gradeAdvancedQuiz2() {
+    let score = 0;
+    mcQuestions.forEach((data, index) => {
+        const selected = document.querySelector(`input[name="mc-${index}"]:checked`);
+        const expBox = document.getElementById(`mc-exp-${index}`);
+        data.a.forEach((_, oIdx) => {
+            document.getElementById(`mc-label-${index}-${oIdx}`).className = 'option-label';
+        });
+        expBox.style.display = 'block';
+        if(selected) {
+            const ans = parseInt(selected.value);
+            if(ans === data.c) {
+                score++;
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--success); font-weight:bold;">✓ Correct!</span><br>${data.exp}`;
+            } else {
+                document.getElementById(`mc-label-${index}-${ans}`).classList.add('wrong-answer');
+                document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+                expBox.innerHTML = `<span style="color:var(--danger); font-weight:bold;">✗ Incorrect.</span><br>${data.exp}`;
+            }
+        } else {
+            document.getElementById(`mc-label-${index}-${data.c}`).classList.add('correct-answer');
+            expBox.innerHTML = `<span style="color:var(--gray); font-weight:bold;">⚠️ Unanswered.</span><br>${data.exp}`;
+        }
+    });
+
+    for(let i=0; i<appQuestions.length; i++) {
+        document.getElementById(`app-exp-${i}`).style.display = 'block';
+    }
+
+    const rBox = document.getElementById('results-box');
+    rBox.style.display = 'block';
+    document.getElementById('final-score').innerText = `${score} / ${mcQuestions.length}`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
